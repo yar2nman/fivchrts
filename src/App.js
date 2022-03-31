@@ -20,7 +20,6 @@ function App() {
       .then(function(myJson) {
         console.log(myJson);
         setData(myJson)
-        console.log('my data', data.solutions[0].solution_name)
       });
   }
   useEffect(()=>{
@@ -29,7 +28,7 @@ function App() {
   return (
     <div className="App">
      {
-       data && data.solutions.length>0 && data.solutions.map((item)=><p>{item.solution_name}</p>)
+       data && data.solutions?.length>0 && data.solutions.map((item)=><p key={item?.solution_name}>{item?.solution_name}</p>)
      }
      
     </div>
