@@ -1,9 +1,11 @@
 // import logo from './logo.svg';
 import React,{useState,useEffect} from 'react';
 import './App.css';
+import MyResponsiveBar from './barchart';
 
 function App() {
   const [data,setData]=useState([]);
+
   const getData=()=>{
     fetch('data.json'
     ,{
@@ -19,41 +21,35 @@ function App() {
       })
       .then(function(myJson) {
         console.log(myJson);
-        setData(myJson)
+        setData(myJson.solutions)
       });
   }
-  useEffect(()=>{
+
+
+  useEffect(()=>{  
     getData()
   },[])
   return (
     <div className="App">
      {
-       data && data.solutions?.length>0 && data.solutions.map((item)=><p key={item?.solution_name}>{item?.solution_name}</p>)
+       data && data?.length>0 && data.map((item)=><p key={item?.solution_name}>{item?.solution_name}</p>)
      }
+
+     <div className='Mydiv'>
+        { data && data?.length>0 &&
+        <MyResponsiveBar data={data.map((item) =>  {
+          let v = {'name': item.solution_name ,
+          'area': item.reports.units_report.table_1.total_built_area, 
+          'nla': item.reports.units_report.table_1.nla, 
+          'efficiency': item.reports.units_report.table_1.efficiency
+        }
+        return v
+        })} keys={['area']} indexby={'name'} ytitle={'Area'} showLegends={false} isHorizontal={false}/>
+        }
+     </div>
      
     </div>
   );
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;
