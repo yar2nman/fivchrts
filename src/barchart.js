@@ -7,12 +7,10 @@ import { ResponsiveBar } from '@nivo/bar'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const MyResponsiveBar = ({ data, keys, indexby, ytitle, showLegends, isHorizontal /* data prop */ }) => (
+const MyResponsiveBar = ({ data, keys, indexby, ytitle, showLegends, isHorizontal, myonclick /* data prop */ }) => (
     <ResponsiveBar
         data={data}
-        onClick={(data) => {
-            console.log(data);
-        }}
+        onClick={myonclick}
         keys={[...keys]}
         indexBy={indexby}
         margin={{ top: 50, right: 130, bottom: 50, left: 60 }}

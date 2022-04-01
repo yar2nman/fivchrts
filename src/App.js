@@ -6,6 +6,15 @@ import MyResponsivePie from './chartsRoot/PiChart';
 
 function App() {
   const [data,setData]=useState([]);
+  const [solution,setsolution]=useState({});
+  const myonclick = (childdata) => {
+    console.log('child data', childdata);
+    console.log('data', data);
+    let solution = data.find(x => x.solution_name ===  childdata?.data?.name)
+    setsolution(solution);
+    console.log('state solution', solution);
+
+}
   const mydata= [
     {
       "id": "c",
@@ -77,7 +86,7 @@ function App() {
           'efficiency': item.reports.units_report.table_1.efficiency
         }
         return v
-        })} keys={['area']} indexby={'name'} ytitle={'Area'} showLegends={false} isHorizontal={false}/>
+        })} keys={['area']} indexby={'name'} ytitle={'Area'} showLegends={false} isHorizontal={false} myonclick={myonclick}/>
         }
      </div>
 
@@ -86,6 +95,8 @@ function App() {
         <MyResponsivePie data={mydata} />
         }
      </div>
+
+     <div>{solution.solution_name}</div>
      
     </div>
   );
