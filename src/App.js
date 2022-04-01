@@ -1,4 +1,5 @@
 // import logo from './logo.svg';
+import { object } from 'prop-types';
 import React,{useState,useEffect} from 'react';
 import './App.css';
 import MyResponsiveBar from './barchart';
@@ -7,11 +8,24 @@ import MyResponsivePie from './chartsRoot/PiChart';
 function App() {
   const [data,setData]=useState([]);
   const [solution,setsolution]=useState({});
+  const [solutionName ,setsolutionName]=useState({});
+  const [solutionIncome ,setsolutionIncome]=useState({});
+  const [project_cost ,setproject_cost]=useState([]);
+  const [table_1_soft_costs ,settable_1_soft_costs]=useState({});
+  const [table_2_pre_construction ,settable_2_pre_construction]=useState({});
+  const [table_3_construction ,settable_3_construction]=useState({});
   const myonclick = (childdata) => {
-    console.log('child data', childdata);
-    console.log('data', data);
     let solution = data.find(x => x.solution_name ===  childdata?.data?.name)
     setsolution(solution);
+    setsolutionName(solution.solution_name)
+    setsolutionIncome(solution.reports.economic_report.income)
+    for(const [key, vlaue] of Object.entries(solution.reports.economic_report.income)) {
+      setproject_cost([...project_cost, {'category':key,'cost':vlaue.cost, 'ratio':vlaue.ratio}])
+    }
+
+    settable_1_soft_costs(solution.reports.economic_report.table_1_soft_costs)
+    settable_2_pre_construction(solution.reports.economic_report.table_2_pre_construction)
+    settable_3_construction(solution.reports.economic_report.table_3_construction)
     console.log('state solution', solution);
 
 }
