@@ -2,9 +2,42 @@
 import React,{useState,useEffect} from 'react';
 import './App.css';
 import MyResponsiveBar from './barchart';
+import MyResponsivePie from './chartsRoot/PiChart';
 
 function App() {
   const [data,setData]=useState([]);
+  const mydata= [
+    {
+      "id": "c",
+      "label": "c",
+      "value": 447,
+      "color": "hsl(15, 70%, 50%)"
+    },
+    {
+      "id": "python",
+      "label": "python",
+      "value": 180,
+      "color": "hsl(64, 70%, 50%)"
+    },
+    {
+      "id": "php",
+      "label": "php",
+      "value": 204,
+      "color": "hsl(229, 70%, 50%)"
+    },
+    {
+      "id": "elixir",
+      "label": "elixir",
+      "value": 295,
+      "color": "hsl(268, 70%, 50%)"
+    },
+    {
+      "id": "java",
+      "label": "java",
+      "value": 298,
+      "color": "hsl(210, 70%, 50%)"
+    }
+  ]
 
   const getData=()=>{
     fetch('data.json'
@@ -45,6 +78,12 @@ function App() {
         }
         return v
         })} keys={['area']} indexby={'name'} ytitle={'Area'} showLegends={false} isHorizontal={false}/>
+        }
+     </div>
+
+     <div className='Mydiv'>
+        { data && data?.length>0 &&
+        <MyResponsivePie data={mydata} />
         }
      </div>
      
