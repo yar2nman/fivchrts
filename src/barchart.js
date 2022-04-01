@@ -10,6 +10,9 @@ import { ResponsiveBar } from '@nivo/bar'
 const MyResponsiveBar = ({ data, keys, indexby, ytitle, showLegends, isHorizontal /* data prop */ }) => (
     <ResponsiveBar
         data={data}
+        onClick={(data) => {
+            console.log(data);
+        }}
         keys={[...keys]}
         indexBy={indexby}
         margin={{ top: 50, right: 130, bottom: 50, left: 60 }}

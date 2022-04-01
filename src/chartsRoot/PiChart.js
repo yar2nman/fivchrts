@@ -6,13 +6,18 @@ import { ResponsivePie } from '@nivo/pie'
 const MyResponsivePie = ({ data /* see data tab */ }) => (
     <ResponsivePie
         data={data}
+        onClick={(data) => {
+            console.log(
+            `all the people that ${data["id"]} for ${data["label"]} = ${data["value"]}`
+            );
+        }}
         margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
         innerRadius={0.7}
         padAngle={0.7}
         cornerRadius={3}
         activeOuterRadiusOffset={8}
         borderWidth={1}
-        colors={{ scheme: 'blues' }}
+        colors={{ scheme: 'reds' }}
         borderColor={{
             from: 'color',
             modifiers: [
