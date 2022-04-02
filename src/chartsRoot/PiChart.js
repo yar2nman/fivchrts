@@ -3,7 +3,7 @@ import React from "react";
 import { ResponsivePie } from '@nivo/pie'
 
 
-const MyResponsivePie = ({ data /* see data tab */ }) => (
+const MyResponsivePie = ({ data, colors /* see data tab */ }) => (
     <ResponsivePie
         data={data}
         onClick={(data) => {
@@ -15,7 +15,7 @@ const MyResponsivePie = ({ data /* see data tab */ }) => (
         cornerRadius={3}
         activeOuterRadiusOffset={8}
         borderWidth={1}
-        colors={{ scheme: 'reds' }}
+        colors={colors || { scheme: 'reds' }}
         borderColor={{
             from: 'color',
             modifiers: [
@@ -39,26 +39,6 @@ const MyResponsivePie = ({ data /* see data tab */ }) => (
                 ]
             ]
         }}
-        defs={[
-            {
-                id: 'dots',
-                type: 'patternDots',
-                background: 'inherit',
-                color: 'rgba(255, 255, 255, 0.3)',
-                size: 4,
-                padding: 1,
-                stagger: true
-            },
-            {
-                id: 'lines',
-                type: 'patternLines',
-                background: 'inherit',
-                color: 'rgba(255, 255, 255, 0.3)',
-                rotation: -45,
-                lineWidth: 6,
-                spacing: 10
-            }
-        ]}
      
     />
 )

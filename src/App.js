@@ -1,5 +1,4 @@
 // import logo from './logo.svg';
-import { object } from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import MyResponsiveBar from './barchart';
@@ -10,10 +9,14 @@ function App() {
   const [solution, setsolution] = useState({});
   const [solutionName, setsolutionName] = useState({});
   const [solutionIncome, setsolutionIncome] = useState({});
+
   const [project_cost, setproject_cost] = useState([]);
   const [table_1_soft_costs, settable_1_soft_costs] = useState({});
   const [table_2_pre_construction, settable_2_pre_construction] = useState({});
   const [table_3_construction, settable_3_construction] = useState({});
+
+  const [consumption_breakdown, setconsumption_breakdown] = useState({});
+  
 
   const myonclick = (childdata) => {
     let solution = data.find(x => x.solution_name === childdata?.data?.name)
@@ -25,6 +28,8 @@ function App() {
     settable1soft_costs();
     settable2pre_construction();
     settable3construction();
+
+    setConsumptionBreakdown();
 
     // settable_1_soft_costs(solution.reports.economic_report.table_1_soft_costs)
     // settable_2_pre_construction(solution.reports.economic_report.table_2_pre_construction)
@@ -62,8 +67,17 @@ function App() {
     function settable3construction() {
       let t3c = [];
       for (const [key, vlaue] of Object.entries(solution.reports.economic_report.table_3_construction)) {
-        t3c.push({ 'id': key, 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
+        t3c.push({ 'id': vlaue.name, 'label': vlaue.name, 'value': vlaue.cost, 'ratio': vlaue.ratio });
         settable_3_construction(t3c);
+      }
+    }
+
+    // Energy Consumption Breakdown
+    function setConsumptionBreakdown() {
+      let cb = [];
+      for (const [key, vlaue] of Object.entries(solution.reports.environmental_report.energy_consumtion.consumption_breakdown)) {
+        cb.push({ 'id': key, 'label': key, 'value': vlaue.total_kWh_year, 'normalized': vlaue.normalised_kWh_year_m2 });
+        setconsumption_breakdown(cb);
       }
     }
   }
@@ -104,10 +118,13 @@ function App() {
               'efficiency': item.reports.units_report.table_1.efficiency
             }
             return v
-          })} keys={['area']} indexby={'name'} ytitle={'Area'} showLegends={false} isHorizontal={false} myonclick={myonclick} />
+          })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={'solution name'} showLegends={false} isHorizontal={false} myonclick={myonclick} />
 
         </div>
       }
+
+      {/* Economic cost */}
+      {/* Cost breakdown */}
 
       {project_cost && project_cost?.length > 0 &&
         <div className='Mydiv'>
@@ -115,10 +132,12 @@ function App() {
 
         </div>
       }
+
+
       {project_cost && project_cost?.length > 0 &&
         <div className='Mydiv'>
 
-          <MyResponsiveBar data={project_cost} keys={['ratio']} indexby={'id'} ytitle={''} showLegends={false} isHorizontal={false} />
+          <MyResponsiveBar data={project_cost} keys={['ratio']} indexby={'id'}  ytitle={'cost %'} xtitle={'cost item'} showLegends={false} isHorizontal={false} />
 
         </div>
       }
@@ -127,7 +146,8 @@ function App() {
       {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
         <div className='Mydiv'>
 
-          <MyResponsiveBar data={table_1_soft_costs} keys={['value']} indexby={'id'} ytitle={''} showLegends={false} isHorizontal={true} />
+          <MyResponsiveBar data={table_1_soft_costs} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Soft Costs'} showLegends={false} isHorizontal={true}
+          margin={{top: 50, right: 30, bottom: 50, left: 100 }} />
 
         </div>
       }
@@ -136,19 +156,41 @@ function App() {
       {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
         <div className='Mydiv'>
 
-          <MyResponsiveBar data={table_2_pre_construction} keys={['value']} indexby={'id'} ytitle={''} showLegends={false} isHorizontal={true} />
+          <MyResponsiveBar data={table_2_pre_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Pre-construction cost'} showLegends={false} isHorizontal={false} />
 
         </div>
       }
 
-      
+
       {table_3_construction && table_3_construction?.length > 0 &&
         <div className='Mydiv'>
 
-          <MyResponsiveBar data={table_3_construction} keys={['value']} indexby={'id'} ytitle={''} showLegends={false} isHorizontal={true} />
+          <MyResponsiveBar data={table_3_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Construction Cost'} showLegends={false} isHorizontal={false} />
 
         </div>
       }
+
+      {/* Income */}
+
+      {/* Net Zero Building */}
+
+      {/* Energy Consumption */}
+
+      {consumption_breakdown && consumption_breakdown?.length > 0 &&
+        <div className='Mydiv'>
+          <MyResponsivePie data={consumption_breakdown} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
+          </div>
+    }
+
+      {consumption_breakdown && consumption_breakdown?.length > 0 &&
+        <div className='Mydiv'>
+          <MyResponsivePie data={consumption_breakdown.map((v) => { 
+            return {'id': v.id, 'label': v.label, 'value': v.normalized}
+           })} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
+          </div>
+    }
+
+      {/* Life Cycle Carbon */}
 
     </div>
   );
