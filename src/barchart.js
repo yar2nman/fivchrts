@@ -11,6 +11,7 @@ const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, showLegends, isH
     <ResponsiveBar
         data={data}
         onClick={myonclick}
+        valueFormat=" >-,"
         keys={[...keys]}
         indexBy={indexby}
         margin={ margin || { top: 50, right: 130, bottom: 50, left: 60 }}

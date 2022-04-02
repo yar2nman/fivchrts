@@ -9,6 +9,7 @@ const MyResponsivePie = ({ data, colors /* see data tab */ }) => (
         onClick={(data) => {
             console.log(data);
         }}
+        valueFormat=" >-,"
         margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
         innerRadius={0.7}
         padAngle={0.7}

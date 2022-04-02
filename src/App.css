@@ -38,9 +38,9 @@
 }
 
 .Mydiv {
-  width: 600px;
+  /* width: 600px; */
   height: 400px;
-  background-color: floralwhite;
+  background-color: white;
   margin-left: 3px;
   margin-bottom: 2px;
 }

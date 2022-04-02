@@ -5,7 +5,6 @@ import MyResponsiveBar from './barchart';
 import MyResponsivePie from './chartsRoot/PiChart';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,9 +34,13 @@ function App() {
 
   const [consumption_breakdown, setconsumption_breakdown] = useState({});
   
+  const monclick = (childdata) => {
+    let solutionName = childdata?.data?.name
+    myonclick(solutionName)
+  }
 
-  const myonclick = (childdata) => {
-    let solution = data.find(x => x.solution_name === childdata?.data?.name)
+  const myonclick = (solution_name) => {
+    let solution = data.find(x => x.solution_name === solution_name)
     setsolution(solution);
     setsolutionName(solution.solution_name)
     setsolutionIncome(solution.reports.economic_report.income)
@@ -126,6 +129,18 @@ function App() {
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
+
+        {
+          data && data?.length > 0 && data.map((solution, index) => {
+            return (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <button onClick={() => myonclick(solution?.solution_name)}>{solution?.solution_name}</button>
+                  
+              </Grid>
+            )
+          })
+        }
+        
       
         {data && data?.length > 0 &&
           <Grid item xs={12} className='Mydiv'>
@@ -137,7 +152,7 @@ function App() {
                   'efficiency': item.reports.units_report.table_1.efficiency
                 }
                 return v
-              })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={'solution name'} showLegends={false} isHorizontal={false} myonclick={myonclick} />
+              })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={'solution name'} showLegends={false} isHorizontal={false} myonclick={monclick} />
           </Grid>
         }
         {/* Economic cost */}
