@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/fivchrts/static/css/main.0d2ed91d.chunk.css",
+    "main.js": "/fivchrts/static/js/main.6fe2622b.chunk.js",
+    "main.js.map": "/fivchrts/static/js/main.6fe2622b.chunk.js.map",
+    "runtime-main.js": "/fivchrts/static/js/runtime-main.1b5bdb9c.js",
+    "runtime-main.js.map": "/fivchrts/static/js/runtime-main.1b5bdb9c.js.map",
+    "static/js/2.b266f8e1.chunk.js": "/fivchrts/static/js/2.b266f8e1.chunk.js",
+    "static/js/2.b266f8e1.chunk.js.map": "/fivchrts/static/js/2.b266f8e1.chunk.js.map",
+    "static/js/3.12a8629e.chunk.js": "/fivchrts/static/js/3.12a8629e.chunk.js",
+    "static/js/3.12a8629e.chunk.js.map": "/fivchrts/static/js/3.12a8629e.chunk.js.map",
+    "index.html": "/fivchrts/index.html",
+    "precache-manifest.ed82094ac77ebed011f92abaa025212b.js": "/fivchrts/precache-manifest.ed82094ac77ebed011f92abaa025212b.js",
+    "service-worker.js": "/fivchrts/service-worker.js",
+    "static/css/main.0d2ed91d.chunk.css.map": "/fivchrts/static/css/main.0d2ed91d.chunk.css.map",
+    "static/js/2.b266f8e1.chunk.js.LICENSE.txt": "/fivchrts/static/js/2.b266f8e1.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1b5bdb9c.js",
+    "static/js/2.b266f8e1.chunk.js",
+    "static/css/main.0d2ed91d.chunk.css",
+    "static/js/main.6fe2622b.chunk.js"
+  ]
+}
