@@ -4,7 +4,25 @@ import './App.css';
 import MyResponsiveBar from './barchart';
 import MyResponsivePie from './chartsRoot/PiChart';
 
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 2,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    margin: 3,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }
+}));
+
 function App() {
+  const classes = useStyles();
+
   const [data, setData] = useState([]);
   const [solution, setsolution] = useState({});
   const [solutionName, setsolutionName] = useState({});
@@ -106,91 +124,70 @@ function App() {
     getData()
   }, [])
   return (
-    <div className="App">
-      {data && data?.length > 0 &&
-        <div className='Mydiv'>
+    <div className={classes.root}>
+      <Grid container spacing={3}>
+      
+        {data && data?.length > 0 &&
+          <Grid item xs={12} className='Mydiv'>
+              <MyResponsiveBar className={classes.paper} data={data.map((item) => {
+                let v = {
+                  'name': item.solution_name,
+                  'area': item.reports.units_report.table_1.total_built_area,
+                  'nla': item.reports.units_report.table_1.nla,
+                  'efficiency': item.reports.units_report.table_1.efficiency
+                }
+                return v
+              })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={'solution name'} showLegends={false} isHorizontal={false} myonclick={myonclick} />
+          </Grid>
+        }
+        {/* Economic cost */}
+        {/* Cost breakdown */}
+        {project_cost && project_cost?.length > 0 &&
+          <Grid item xs={12} sm={6} className='Mydiv'>
+            <MyResponsivePie data={project_cost} />
+          </Grid>
+        }
 
-          <MyResponsiveBar data={data.map((item) => {
-            let v = {
-              'name': item.solution_name,
-              'area': item.reports.units_report.table_1.total_built_area,
-              'nla': item.reports.units_report.table_1.nla,
-              'efficiency': item.reports.units_report.table_1.efficiency
-            }
-            return v
-          })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={'solution name'} showLegends={false} isHorizontal={false} myonclick={myonclick} />
+        {project_cost && project_cost?.length > 0 &&
+          <Grid item xs={12} sm={6} className='Mydiv'>
+            <MyResponsiveBar data={project_cost} keys={['ratio']} indexby={'id'}  ytitle={'cost %'} xtitle={'cost item'} showLegends={false} isHorizontal={false} />
+          </Grid>
+        }
 
-        </div>
+        {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
+          <Grid item xs={12} sm={6} className='Mydiv'>
+            <MyResponsiveBar data={table_1_soft_costs} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Soft Costs'} showLegends={false} isHorizontal={true}
+            margin={{top: 50, right: 30, bottom: 50, left: 100 }} />
+          </Grid>
+        }
+
+        {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
+          <Grid item xs={12} sm={6} className='Mydiv'>
+            <MyResponsiveBar data={table_2_pre_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Pre-construction cost'} showLegends={false} isHorizontal={false} />
+          </Grid>
+        }
+        {table_3_construction && table_3_construction?.length > 0 &&
+          <Grid item xs={12} sm={6} className='Mydiv'>
+            <MyResponsiveBar data={table_3_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Construction Cost'} showLegends={false} isHorizontal={false} />
+          </Grid>
+        }
+        {/* Income */}
+        {/* Net Zero Building */}
+        {/* Energy Consumption */}
+        {consumption_breakdown && consumption_breakdown?.length > 0 &&
+          <Grid item xs={12} sm={6} className='Mydiv'>
+            <MyResponsivePie data={consumption_breakdown} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
+            </Grid>
       }
-
-      {/* Economic cost */}
-      {/* Cost breakdown */}
-
-      {project_cost && project_cost?.length > 0 &&
-        <div className='Mydiv'>
-          <MyResponsivePie data={project_cost} />
-
-        </div>
+        {consumption_breakdown && consumption_breakdown?.length > 0 &&
+          <Grid item xs={12} sm={6} className='Mydiv'>
+            <MyResponsivePie data={consumption_breakdown.map((v) => {
+              return {'id': v.id, 'label': v.label, 'value': v.normalized}
+             })} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
+            </Grid>
       }
-
-
-      {project_cost && project_cost?.length > 0 &&
-        <div className='Mydiv'>
-
-          <MyResponsiveBar data={project_cost} keys={['ratio']} indexby={'id'}  ytitle={'cost %'} xtitle={'cost item'} showLegends={false} isHorizontal={false} />
-
-        </div>
-      }
-
-
-      {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
-        <div className='Mydiv'>
-
-          <MyResponsiveBar data={table_1_soft_costs} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Soft Costs'} showLegends={false} isHorizontal={true}
-          margin={{top: 50, right: 30, bottom: 50, left: 100 }} />
-
-        </div>
-      }
-
-
-      {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
-        <div className='Mydiv'>
-
-          <MyResponsiveBar data={table_2_pre_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Pre-construction cost'} showLegends={false} isHorizontal={false} />
-
-        </div>
-      }
-
-
-      {table_3_construction && table_3_construction?.length > 0 &&
-        <div className='Mydiv'>
-
-          <MyResponsiveBar data={table_3_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Construction Cost'} showLegends={false} isHorizontal={false} />
-
-        </div>
-      }
-
-      {/* Income */}
-
-      {/* Net Zero Building */}
-
-      {/* Energy Consumption */}
-
-      {consumption_breakdown && consumption_breakdown?.length > 0 &&
-        <div className='Mydiv'>
-          <MyResponsivePie data={consumption_breakdown} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
-          </div>
-    }
-
-      {consumption_breakdown && consumption_breakdown?.length > 0 &&
-        <div className='Mydiv'>
-          <MyResponsivePie data={consumption_breakdown.map((v) => { 
-            return {'id': v.id, 'label': v.label, 'value': v.normalized}
-           })} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
-          </div>
-    }
-
-      {/* Life Cycle Carbon */}
+        {/* Life Cycle Carbon */}
+    </Grid>
 
     </div>
   );
