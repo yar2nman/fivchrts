@@ -7,7 +7,7 @@ import { ResponsiveBar } from '@nivo/bar'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, showLegends, isHorizontal, myonclick, margin, colors /* data prop */ }) => (
+const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, showLegends, isHorizontal, myonclick, margin, colors, axisBottomTickRotation, axisBottomlegendOffset  /* data prop */ }) => (
     <ResponsiveBar
         data={data}
         onClick={myonclick}
@@ -21,13 +21,13 @@ const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, showLegends, isH
         indexScale={{ type: 'band', round: true }}
         colors={colors || { scheme: 'blues'}}
         colorBy="indexValue"
-        axisBottom={{
+        axisBottom={ {
             tickSize: 5,
             tickPadding: 5,
-            tickRotation: 0,
+            tickRotation: axisBottomTickRotation || 0,
             legend: xtitle || indexby,
             legendPosition: 'middle',
-            legendOffset: 32
+            legendOffset: axisBottomlegendOffset || 32
         }}
         axisLeft={{
             tickSize: 5,

@@ -33,6 +33,8 @@ function App() {
   const [table_3_construction, settable_3_construction] = useState({});
 
   const [consumption_breakdown, setconsumption_breakdown] = useState({});
+  const [embodied_carbon_breakdown, setembodied_carbon_breakdown] = useState([]);
+  
   
   const monclick = (childdata) => {
     let solutionName = childdata?.data?.name
@@ -51,6 +53,7 @@ function App() {
     settable3construction();
 
     setConsumptionBreakdown();
+    setEmbodiedCarbonBreakdown();
 
     // settable_1_soft_costs(solution.reports.economic_report.table_1_soft_costs)
     // settable_2_pre_construction(solution.reports.economic_report.table_2_pre_construction)
@@ -100,6 +103,16 @@ function App() {
         cb.push({ 'id': key, 'label': key, 'value': vlaue.total_kWh_year, 'normalized': vlaue.normalised_kWh_year_m2 });
         setconsumption_breakdown(cb);
       }
+    }
+
+    // Embodied Carbon Breakdown
+    function setEmbodiedCarbonBreakdown() {
+      let ecb = [];
+      for (const [key, vlaue] of Object.entries(solution.reports.environmental_report.lca_dictionary.embodied_carbon_breakdown)) {
+        ecb.push({ 'id': key, 'label': key, 'value': vlaue });
+        setembodied_carbon_breakdown(ecb);
+      }
+      console.log('embodied carbon breakdown', ecb);
     }
   }
 
@@ -200,6 +213,14 @@ function App() {
               return {'id': v.id, 'label': v.label, 'value': v.normalized}
              })} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
             </Grid>
+      }
+
+      {embodied_carbon_breakdown && embodied_carbon_breakdown?.length > 0 && 
+        <Grid item xs={12} sm={6} className='Mydiv'>
+          <MyResponsiveBar data={embodied_carbon_breakdown} keys={['value']} indexby={'id'} ytitle={''} xtitle={''} 
+          colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} axisBottomTickRotation={-45} 
+          margin={{ top: 3, right: 3, bottom: 100, left: 60 }} axisBottomlegendOffset={50}/>
+        </Grid>
       }
         {/* Life Cycle Carbon */}
     </Grid>
