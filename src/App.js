@@ -257,9 +257,6 @@ function App() {
         </ChartsSection>
 }
          
-       
-
-      
         {/* Life Cycle Carbon */}
     </Grid>
 
