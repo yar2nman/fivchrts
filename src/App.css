@@ -36,11 +36,15 @@
     transform: rotate(360deg);
   }
 }
-
+body {
+  background-color: #ebeef0;
+}
 .Mydiv {
   /* width: 600px; */
   height: 400px;
-  background-color: white;
   margin-left: 3px;
   margin-bottom: 2px;
+}
+.MuiGrid-container {
+  max-width: 100%;
 }

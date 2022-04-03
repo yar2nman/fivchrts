@@ -3,22 +3,50 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import MyResponsiveBar from './barchart';
 import MyResponsivePie from './chartsRoot/PiChart';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import ChartWrapper from './components/ChartWrapper';
+import { AppBar, FormControl, InputLabel, MenuItem, Paper, Select, Toolbar, Typography } from '@material-ui/core';
+import ChartsSection from './components/ChartsSection';
 
+const getName = (str = '') => {
+  return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+}
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 2,
+    maxWidth: "100%",
+    padding: "74px 35px",
   },
   paper: {
     padding: theme.spacing(2),
     margin: 3,
     textAlign: 'center',
     color: theme.palette.text.secondary,
-  }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    marginBottom: theme.spacing(6),
+    minWidth: 200,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
+const TopBar = () => {
+  const classes = useStyles();
 
+  return <>
+    <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" noWrap>
+           App Name
+          </Typography>
+        </Toolbar>
+      </AppBar>
+  </>
+}
 function App() {
   const classes = useStyles();
 
@@ -36,12 +64,8 @@ function App() {
   const [embodied_carbon_breakdown, setembodied_carbon_breakdown] = useState([]);
   
   
-  const monclick = (childdata) => {
-    let solutionName = childdata?.data?.name
-    myonclick(solutionName)
-  }
 
-  const myonclick = (solution_name) => {
+  const setSolutionData = (solution_name) => {
     let solution = data.find(x => x.solution_name === solution_name)
     setsolution(solution);
     setsolutionName(solution.solution_name)
@@ -66,7 +90,7 @@ function App() {
       let pc = [];
       for (const [key, vlaue] of Object.entries(solution.reports.economic_report.project_cost)) {
         if (key !== 'total') {
-          pc.push({ 'id': key, 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
+          pc.push({ 'id': getName(key), 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
         }
         setproject_cost(pc);
       }
@@ -75,7 +99,7 @@ function App() {
     function settable1soft_costs() {
       let t1sc = [];
       for (const [key, vlaue] of Object.entries(solution.reports.economic_report.table_1_soft_costs)) {
-        t1sc.push({ 'id': key, 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
+        t1sc.push({ 'id': getName(key), 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
         settable_1_soft_costs(t1sc);
       }
     }
@@ -83,7 +107,7 @@ function App() {
     function settable2pre_construction() {
       let t2pc = [];
       for (const [key, vlaue] of Object.entries(solution.reports.economic_report.table_2_pre_construction)) {
-        t2pc.push({ 'id': key, 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
+        t2pc.push({ 'id': getName(key), 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
         settable_2_pre_construction(t2pc);
       }
     }
@@ -100,7 +124,7 @@ function App() {
     function setConsumptionBreakdown() {
       let cb = [];
       for (const [key, vlaue] of Object.entries(solution.reports.environmental_report.energy_consumtion.consumption_breakdown)) {
-        cb.push({ 'id': key, 'label': key, 'value': vlaue.total_kWh_year, 'normalized': vlaue.normalised_kWh_year_m2 });
+        cb.push({ 'id': getName(key), 'label': key, 'value': vlaue.total_kWh_year, 'normalized': vlaue.normalised_kWh_year_m2 });
         setconsumption_breakdown(cb);
       }
     }
@@ -126,12 +150,10 @@ function App() {
       }
     )
       .then(function (response) {
-        console.log(response)
         return response.json();
       })
       .then(function (myJson) {
-        console.log(myJson);
-        setData(myJson.solutions)
+        setData(myJson.solutions);
       });
   }
 
@@ -139,93 +161,107 @@ function App() {
   useEffect(() => {
     getData()
   }, [])
+
+
   return (
+    <>
+    <TopBar/>
     <div className={classes.root}>
-      <Grid container spacing={3}>
-
-        {
-          data && data?.length > 0 && data.map((solution, index) => {
-            return (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <button onClick={() => myonclick(solution?.solution_name)}>{solution?.solution_name}</button>
-                  
-              </Grid>
-            )
-          })
-        }
-        
-      
         {data && data?.length > 0 &&
-          <Grid item xs={12} className='Mydiv'>
-              <MyResponsiveBar className={classes.paper} data={data.map((item) => {
-                let v = {
-                  'name': item.solution_name,
-                  'area': item.reports.units_report.table_1.total_built_area,
-                  'nla': item.reports.units_report.table_1.nla,
-                  'efficiency': item.reports.units_report.table_1.efficiency
-                }
-                return v
-              })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={'solution name'} showLegends={false} isHorizontal={false} myonclick={monclick} />
-          </Grid>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="solutions-select-label">Select Solution</InputLabel>
+                <Select
+                  labelId="solutions-select-label"
+                  id="solutions-select"
+                  value={solution?.solution_name}
+                  onChange={d => setSolutionData(d.target.value)}
+                >
+                  {data.map((item) =>
+                    <MenuItem value={item.solution_name}
+                     key={item}>{getName(item.solution_name)}</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
         }
-        {/* Economic cost */}
-        {/* Cost breakdown */}
-        {project_cost && project_cost?.length > 0 &&
-          <Grid item xs={12} sm={6} className='Mydiv'>
+      <Grid  container spacing={3}>
+        { project_cost && project_cost.length > 0 && <ChartsSection title="Economic Report">
+          <Grid item xs={12} sm={6} lg={4}  className='Mydiv'>
+            <ChartWrapper>
             <MyResponsivePie data={project_cost} />
+            </ChartWrapper>
           </Grid>
-        }
 
-        {project_cost && project_cost?.length > 0 &&
-          <Grid item xs={12} sm={6} className='Mydiv'>
+          <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
+            <ChartWrapper>
             <MyResponsiveBar data={project_cost} keys={['ratio']} indexby={'id'}  ytitle={'cost %'} xtitle={'cost item'} showLegends={false} isHorizontal={false} />
+            </ChartWrapper>
           </Grid>
-        }
-
         {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
-          <Grid item xs={12} sm={6} className='Mydiv'>
+          <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
+            <ChartWrapper>
             <MyResponsiveBar data={table_1_soft_costs} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Soft Costs'} showLegends={false} isHorizontal={true}
             margin={{top: 50, right: 30, bottom: 50, left: 100 }} />
+            </ChartWrapper>
           </Grid>
         }
-
         {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
-          <Grid item xs={12} sm={6} className='Mydiv'>
+          <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
+            <ChartWrapper>
             <MyResponsiveBar data={table_2_pre_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Pre-construction cost'} showLegends={false} isHorizontal={false} />
+            </ChartWrapper>
           </Grid>
         }
         {table_3_construction && table_3_construction?.length > 0 &&
-          <Grid item xs={12} sm={6} className='Mydiv'>
+          <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
+            <ChartWrapper>
             <MyResponsiveBar data={table_3_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Construction Cost'} showLegends={false} isHorizontal={false} />
+            </ChartWrapper>
           </Grid>
         }
+        <br/>
+        </ChartsSection>
+}
+        {/* Economic cost */}
+        {/* Cost breakdown */}
         {/* Income */}
         {/* Net Zero Building */}
         {/* Energy Consumption */}
-        {consumption_breakdown && consumption_breakdown?.length > 0 &&
-          <Grid item xs={12} sm={6} className='Mydiv'>
-            <MyResponsivePie data={consumption_breakdown} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
+
+        {consumption_breakdown && consumption_breakdown?.length > 0 && <ChartsSection title="Environmental Report">
+        <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
+            <ChartWrapper>
+            <MyResponsivePie data={consumption_breakdown} showLegends={false} isHorizontal={false} />
+            </ChartWrapper>
             </Grid>
-      }
-        {consumption_breakdown && consumption_breakdown?.length > 0 &&
-          <Grid item xs={12} sm={6} className='Mydiv'>
+
+            {consumption_breakdown && consumption_breakdown?.length > 0 &&
+          <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
+            <ChartWrapper>
             <MyResponsivePie data={consumption_breakdown.map((v) => {
               return {'id': v.id, 'label': v.label, 'value': v.normalized}
-             })} colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} />
+             })} showLegends={false} isHorizontal={false} />
+            </ChartWrapper>
             </Grid>
       }
 
-      {embodied_carbon_breakdown && embodied_carbon_breakdown?.length > 0 && 
+{embodied_carbon_breakdown && embodied_carbon_breakdown?.length > 0 && 
         <Grid item xs={12} sm={6} className='Mydiv'>
+            <ChartWrapper>
+
           <MyResponsiveBar data={embodied_carbon_breakdown} keys={['value']} indexby={'id'} ytitle={''} xtitle={''} 
           colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} axisBottomTickRotation={-45} 
           margin={{ top: 3, right: 3, bottom: 100, left: 60 }} axisBottomlegendOffset={50}/>
+          </ChartWrapper>
         </Grid>
       }
+        </ChartsSection>
+}
+         
         {/* Life Cycle Carbon */}
     </Grid>
 
     </div>
+    </>
   );
 }
 
