@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import MyResponsiveBar from './barchart';
 import MyResponsivePie from './chartsRoot/PiChart';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ChartWrapper from './components/ChartWrapper';
-import { AppBar, Container, FormControl, InputLabel, MenuItem, Paper, Select, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, FormControl, InputLabel, MenuItem, Paper, Select, Toolbar, Typography } from '@material-ui/core';
+import ChartsSection from './components/ChartsSection';
 
 const getName = (str = '') => {
   return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 2,
     maxWidth: "100%",
-    padding: "74px 50px",
+    padding: "74px 35px",
   },
   paper: {
     padding: theme.spacing(2),
@@ -65,7 +65,7 @@ function App() {
   
   
 
-  const myonclick = (solution_name) => {
+  const setSolutionData = (solution_name) => {
     let solution = data.find(x => x.solution_name === solution_name)
     setsolution(solution);
     setsolutionName(solution.solution_name)
@@ -150,12 +150,10 @@ function App() {
       }
     )
       .then(function (response) {
-        console.log(response)
         return response.json();
       })
       .then(function (myJson) {
-        console.log(myJson);
-        setData(myJson.solutions)
+        setData(myJson.solutions);
       });
   }
 
@@ -163,6 +161,8 @@ function App() {
   useEffect(() => {
     getData()
   }, [])
+
+
   return (
     <>
     <TopBar/>
@@ -174,7 +174,7 @@ function App() {
                   labelId="solutions-select-label"
                   id="solutions-select"
                   value={solution?.solution_name}
-                  onChange={d => myonclick(d.target.value)}
+                  onChange={d => setSolutionData(d.target.value)}
                 >
                   {data.map((item) =>
                     <MenuItem value={item.solution_name}
@@ -184,26 +184,19 @@ function App() {
               </FormControl>
         }
       <Grid  container spacing={3}>
-        {/* Economic cost */}
-        {/* Cost breakdown */}
-        {project_cost && project_cost?.length > 0 &&
+        { project_cost && project_cost.length > 0 && <ChartsSection title="Economic Report">
           <Grid item xs={12} sm={6} lg={4}  className='Mydiv'>
             <ChartWrapper>
             <MyResponsivePie data={project_cost} />
             </ChartWrapper>
           </Grid>
-        }
 
-        {project_cost && project_cost?.length > 0 &&
           <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
             <ChartWrapper>
             <MyResponsiveBar data={project_cost} keys={['ratio']} indexby={'id'}  ytitle={'cost %'} xtitle={'cost item'} showLegends={false} isHorizontal={false} />
             </ChartWrapper>
           </Grid>
-        }
-
         {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
-
           <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
             <ChartWrapper>
             <MyResponsiveBar data={table_1_soft_costs} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Soft Costs'} showLegends={false} isHorizontal={true}
@@ -211,7 +204,6 @@ function App() {
             </ChartWrapper>
           </Grid>
         }
-
         {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
           <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
             <ChartWrapper>
@@ -226,17 +218,23 @@ function App() {
             </ChartWrapper>
           </Grid>
         }
+        <br/>
+        </ChartsSection>
+}
+        {/* Economic cost */}
+        {/* Cost breakdown */}
         {/* Income */}
         {/* Net Zero Building */}
         {/* Energy Consumption */}
-        {consumption_breakdown && consumption_breakdown?.length > 0 &&
-          <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
+
+        {consumption_breakdown && consumption_breakdown?.length > 0 && <ChartsSection title="Environmental Report">
+        <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
             <ChartWrapper>
             <MyResponsivePie data={consumption_breakdown} showLegends={false} isHorizontal={false} />
             </ChartWrapper>
             </Grid>
-      }
-        {consumption_breakdown && consumption_breakdown?.length > 0 &&
+
+            {consumption_breakdown && consumption_breakdown?.length > 0 &&
           <Grid item xs={12} sm={6} lg={4} className='Mydiv'>
             <ChartWrapper>
             <MyResponsivePie data={consumption_breakdown.map((v) => {
@@ -246,13 +244,22 @@ function App() {
             </Grid>
       }
 
-      {embodied_carbon_breakdown && embodied_carbon_breakdown?.length > 0 && 
+{embodied_carbon_breakdown && embodied_carbon_breakdown?.length > 0 && 
         <Grid item xs={12} sm={6} className='Mydiv'>
+            <ChartWrapper>
+
           <MyResponsiveBar data={embodied_carbon_breakdown} keys={['value']} indexby={'id'} ytitle={''} xtitle={''} 
           colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} axisBottomTickRotation={-45} 
           margin={{ top: 3, right: 3, bottom: 100, left: 60 }} axisBottomlegendOffset={50}/>
+          </ChartWrapper>
         </Grid>
       }
+        </ChartsSection>
+}
+         
+       
+
+      
         {/* Life Cycle Carbon */}
     </Grid>
 
