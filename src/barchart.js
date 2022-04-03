@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ResponsiveBar } from '@nivo/bar'
-
+import { colorSchema } from './utils';
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
@@ -19,7 +19,7 @@ const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, showLegends, isH
         layout={isHorizontal? "horizontal": "vertical"}
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
-        colors={colors || { scheme: 'blues'}}
+        colors={colors || { scheme: colorSchema}}
         colorBy="indexValue"
         axisBottom={{
             tickSize: 5,
