@@ -1,7 +1,6 @@
 import React from "react";
 
 import { ResponsivePie } from '@nivo/pie'
-import {colorSchema} from  './../utils';
 
 const MyResponsivePie = ({ data, colors /* see data tab */ }) => (
     <ResponsivePie
@@ -16,7 +15,7 @@ const MyResponsivePie = ({ data, colors /* see data tab */ }) => (
         cornerRadius={3}
         activeOuterRadiusOffset={8}
         borderWidth={1}
-        colors={colors || { scheme: colorSchema }}
+        colors={colors || { scheme: 'reds' }}
         borderColor={{
             from: 'color',
             modifiers: [
