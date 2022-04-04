@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import ChartWrapper from './chartsRoot/ChartWrapper';
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import ChartsSection from './chartsRoot/ChartsSection';
+import MyTable from './chartsRoot/Table';
 
 const getName = (str = '') => {
   return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -33,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  tableContainer: {
+    height: 400,
+    width: "100%",
+  }
 }));
 function App() {
   const classes = useStyles();
@@ -177,13 +182,13 @@ function App() {
             <ChartWrapper name={'Solution Area Chart'} >
               <MyResponsiveBar className={classes.paper} data={data.map((item) => {
                 let v = {
-                  'name': item.solution_name,
+                  'name': getName(item.solution_name),
                   'area': item.reports.units_report.table_1.total_built_area,
                   'nla': item.reports.units_report.table_1.nla,
                   'efficiency': item.reports.units_report.table_1.efficiency
                 }
                 return v
-              })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={'solution name'} showLegends={false} isHorizontal={false}  />
+              })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={' '} showLegends={false} isHorizontal={false}  />
               </ChartWrapper>
           </Grid>
         }
@@ -253,10 +258,16 @@ function App() {
         <Grid item xs={12} sm={6} className='Mydiv'>
             <ChartWrapper name={'Embodied Carbon Breakdown'}>
 
-          <MyResponsiveBar data={embodied_carbon_breakdown} keys={['value']} indexby={'id'} ytitle={''} xtitle={''} 
+          <MyResponsiveBar data={embodied_carbon_breakdown} keys={['value']} indexby={'id'} ytitle={''} xtitle={' '} 
           colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} axisBottomTickRotation={-45} 
           margin={{ top: 10, right: 3, bottom: 100, left: 60 }} axisBottomlegendOffset={50}/>
           </ChartWrapper>
+        </Grid>
+      }
+
+      {embodied_carbon_breakdown && embodied_carbon_breakdown?.length > 0 &&
+        <Grid item xs={12} sm={6} className={classes.tableContainer}>
+          <MyTable columns={['Item', 'Value']} rows={embodied_carbon_breakdown.map(r => [r.id, r.value])} caption={'Embodied Carbon Breakdown Table'} />
         </Grid>
       }
         </ChartsSection>

@@ -34,7 +34,8 @@ const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, showLegends, isH
             tickRotation: 0,
             legend: ytitle,
             legendPosition: 'middle',
-            legendOffset: -40
+            legendOffset: -40,
+            format: value => `${ isNaN(value)? value : Number(value).toLocaleString()}`,
         }}
         labelSkipWidth={12}
         labelSkipHeight={12}
