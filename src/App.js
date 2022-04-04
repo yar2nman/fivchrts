@@ -234,14 +234,14 @@ function App() {
 
         {consumption_breakdown && consumption_breakdown?.length > 0 && <ChartsSection title="Environmental Report">
         <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
-            <ChartWrapper>
+            <ChartWrapper name={'Energy Consumption Breakdown KWH / Year'}>
             <MyResponsivePie data={consumption_breakdown} showLegends={false} isHorizontal={false} colors={{scheme: 'greens'}} />
             </ChartWrapper>
             </Grid>
 
             {consumption_breakdown && consumption_breakdown?.length > 0 &&
           <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
-            <ChartWrapper>
+            <ChartWrapper name={'Energy Consumption Normalized KWH / Year / M2'}>
             <MyResponsivePie data={consumption_breakdown.map((v) => {
               return {'id': v.id, 'label': v.label, 'value': v.normalized}
              })} showLegends={false} isHorizontal={false} colors={{scheme: 'greens'}} />
@@ -251,11 +251,11 @@ function App() {
 
 {embodied_carbon_breakdown && embodied_carbon_breakdown?.length > 0 && 
         <Grid item xs={12} sm={6} className='Mydiv'>
-            <ChartWrapper>
+            <ChartWrapper name={'Embodied Carbon Breakdown'}>
 
           <MyResponsiveBar data={embodied_carbon_breakdown} keys={['value']} indexby={'id'} ytitle={''} xtitle={''} 
           colors={{scheme: 'greens'}} showLegends={false} isHorizontal={false} axisBottomTickRotation={-45} 
-          margin={{ top: 3, right: 3, bottom: 100, left: 60 }} axisBottomlegendOffset={50}/>
+          margin={{ top: 10, right: 3, bottom: 100, left: 60 }} axisBottomlegendOffset={50}/>
           </ChartWrapper>
         </Grid>
       }

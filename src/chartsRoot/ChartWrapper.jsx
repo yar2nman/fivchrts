@@ -9,6 +9,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 5,
     backgroundColor: "white",
     position: "relative",
+    // paddingTop: theme.spacing(3),
+  },
+  child: {
+    height: "90%",
+    width: "100%",
+    position: "absolute",
+    top: 40,
+    left: 0,
   },
   chartName: {
     position: "absolute",
@@ -23,8 +31,12 @@ const ChartWrapper = ({ children, name }) => {
     <>
       <div className={classes.root}>
         {name && <span className={classes.chartName}>{name}</span>}
+        {/* {children} */} 
+        <div className={classes.child}>
         {children}
       </div>
+      </div>
+     
     </>
   );
 };
