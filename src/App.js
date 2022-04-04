@@ -6,7 +6,7 @@ import MyResponsivePie from './chartsRoot/PiChart';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ChartWrapper from './chartsRoot/ChartWrapper';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem, Select, Paper } from '@material-ui/core';
 import ChartsSection from './chartsRoot/ChartsSection';
 import MyTable from './chartsRoot/Table';
 
@@ -54,6 +54,11 @@ function App() {
 
   const [consumption_breakdown, setconsumption_breakdown] = useState({});
   const [embodied_carbon_breakdown, setembodied_carbon_breakdown] = useState([]);
+  const [graph_built_area, setgraph_built_area] = useState([]);
+  const [table_2, settable_2] = useState([]);
+
+  
+
   
   
 
@@ -70,6 +75,8 @@ function App() {
 
     setConsumptionBreakdown();
     setEmbodiedCarbonBreakdown();
+    setGraphBuiltArea();
+    settable2();
 
     // settable_1_soft_costs(solution.reports.economic_report.table_1_soft_costs)
     // settable_2_pre_construction(solution.reports.economic_report.table_2_pre_construction)
@@ -130,6 +137,29 @@ function App() {
       }
       console.log('embodied carbon breakdown', ecb);
     }
+
+    // Graph Built Area
+    function setGraphBuiltArea() {
+      let gba = [];
+      for (const [key, vlaue] of Object.entries(solution.reports.units_report.graph_built_area)) {
+        gba.push({ 'id': getName(vlaue.name), 'label': getName(vlaue.name), 'value': vlaue.area_by_unit });
+        setgraph_built_area(gba);
+      }
+      console.log('graph built area', gba);
+    }
+
+    // Table 2
+    function settable2() {
+      let t2 = [];
+      for (const [key, vlaue] of Object.entries(solution.reports.units_report.table_2)) {
+        t2.push([vlaue.name, vlaue.number_of_units, vlaue.ratio_by_num_of_units, vlaue.ratio_by_nla, vlaue.ratio_by_total_built_area]);
+        
+       
+      }
+      settable_2(t2);
+      console.log('table 2', t2);
+    }
+    
   }
 
   const getData = () => {
@@ -193,6 +223,36 @@ function App() {
           </Grid>
         }
       <Grid  container spacing={3}>
+
+
+        {/* Unit Reports  */}
+{graph_built_area && graph_built_area?.length > 0 &&
+        <ChartsSection title={'Unit Reports'}>
+          <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
+            <ChartWrapper name={'Unit Built Area Chart'} >
+              <MyResponsivePie data={graph_built_area} colors={{scheme: 'reds'}}/>
+            </ChartWrapper>
+
+          </Grid>
+
+          <Grid container spacing={3} item xs={12} sm={6} lg={6}>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>Efficiency {solution.reports.units_report.table_1.efficiency} %</Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>NLA {solution.reports.units_report.table_1.nla} m2</Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>Total Built Area {solution.reports.units_report.table_1.total_built_area} m2</Paper>
+            </Grid>
+
+          </Grid>
+
+          <Grid item xs={12} sm={12} lg={12} className='Mydiv'>
+            <MyTable rows={table_2} columns={['name', 'number_of_units', 'ratio_by_num_of_units', 'ratio_by_nla', 'ratio_by_total_built_area']} caption={'Units Table'} />
+          </Grid>
+        </ChartsSection>
+}        
         { project_cost && project_cost.length > 0 && 
         <ChartsSection title="Economic Report">
           <Grid item xs={12} sm={6} lg={6}  className='Mydiv'>
@@ -270,6 +330,8 @@ function App() {
           <MyTable columns={['Item', 'Value']} rows={embodied_carbon_breakdown.map(r => [r.id, r.value])} caption={'Embodied Carbon Breakdown Table'} />
         </Grid>
       }
+
+
         </ChartsSection>
 }
          
