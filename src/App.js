@@ -207,30 +207,17 @@ function App() {
               </FormControl>
         }
 
-{data && data?.length > 0 &&
-          <Grid item xs={12} className='Mydiv'>
-            <ChartWrapper name={'Solution Area Chart'} >
-              <MyResponsiveBar className={classes.paper} data={data.map((item) => {
-                let v = {
-                  'name': getName(item.solution_name),
-                  'area': item.reports.units_report.table_1.total_built_area,
-                  'nla': item.reports.units_report.table_1.nla,
-                  'efficiency': item.reports.units_report.table_1.efficiency
-                }
-                return v
-              })} keys={['area']} indexby={'name'} ytitle={'Area'} xtitle={' '} showLegends={false} isHorizontal={false}  />
-              </ChartWrapper>
-          </Grid>
-        }
+
       <Grid  container spacing={3}>
 
 
         {/* Unit Reports  */}
 {graph_built_area && graph_built_area?.length > 0 &&
-        <ChartsSection title={'Unit Reports'}>
+        <ChartsSection title={'Units Report'}>
+
           <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
-            <ChartWrapper name={'Unit Built Area Chart'} >
-              <MyResponsivePie data={graph_built_area} colors={{scheme: 'reds'}}/>
+            <ChartWrapper name={'Unit Built Area (m2)'} >
+              <MyResponsiveBar data={graph_built_area} keys={['value']} indexby={'id'} xtitle={' '} xaxixEnabled={false} isHorizontal={true} colors={{scheme: 'reds'}}/>
             </ChartWrapper>
 
           </Grid>
