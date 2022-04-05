@@ -216,7 +216,7 @@ function App() {
 {graph_built_area && graph_built_area?.length > 0 &&
         <ChartsSection title={'Units Report'}>
 
-          <Grid item xs={12} sm={3} lg={3}>
+          <Grid item xs={12} sm={6} lg={6}>
             <ChartWrapper name={'Built Area (m2)'} >
               <MyResponsiveBar data={graph_built_area} keys={['value']} indexby={'id'} 
               xtitle={' '} xaxixEnabled={false} isHorizontal={true} colors={{scheme: 'reds'}}
@@ -224,13 +224,13 @@ function App() {
             </ChartWrapper>
           </Grid>
 
-          <Grid item xs={12} sm={9} lg={9} >
+          <Grid item xs={12} sm={6} lg={6} >
             <grid container spacing={0}>
               <Grid item xs={12} >
               <Grid container spacing={1} >
-                <Grid item xs={12}>Efficiency {solution.reports.units_report.table_1.efficiency} %</Grid>
-                <Grid item xs={12}>NLA {solution.reports.units_report.table_1.nla} m2</Grid>
-                <Grid item xs={12}>Total Built Area {solution.reports.units_report.table_1.total_built_area} m2</Grid>
+                <Grid item xs={12}>Efficiency {solution.reports.units_report.table_1.efficiency.toLocaleString()} %</Grid>
+                <Grid item xs={12}>NLA {solution.reports.units_report.table_1.nla.toLocaleString()} m2</Grid>
+                <Grid item xs={12}>Total Built Area {solution.reports.units_report.table_1.total_built_area.toLocaleString()} m2</Grid>
               </Grid>
               </Grid>
               <Grid item xs={12} >
