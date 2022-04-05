@@ -182,7 +182,8 @@ function App() {
 
   useEffect(() => {
     getData()
-  }, [])
+
+      }, [])
 
 
   return (
@@ -208,36 +209,38 @@ function App() {
         }
 
 
-      <Grid  container spacing={3}>
+      <Grid  container spacing={1}>
 
 
         {/* Unit Reports  */}
 {graph_built_area && graph_built_area?.length > 0 &&
         <ChartsSection title={'Units Report'}>
 
-          <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
-            <ChartWrapper name={'Unit Built Area (m2)'} >
-              <MyResponsiveBar data={graph_built_area} keys={['value']} indexby={'id'} xtitle={' '} xaxixEnabled={false} isHorizontal={true} colors={{scheme: 'reds'}}/>
+          <Grid item xs={12} sm={3} lg={3}>
+            <ChartWrapper name={'Built Area (m2)'} >
+              <MyResponsiveBar data={graph_built_area} keys={['value']} indexby={'id'} 
+              xtitle={' '} xaxixEnabled={false} isHorizontal={true} colors={{scheme: 'reds'}}
+              margin={{ top: 0, right: 10, bottom: 0, left: 80 }}/>
             </ChartWrapper>
-
           </Grid>
 
-          <Grid container spacing={3} item xs={12} sm={6} lg={6}>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>Efficiency {solution.reports.units_report.table_1.efficiency} %</Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>NLA {solution.reports.units_report.table_1.nla} m2</Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>Total Built Area {solution.reports.units_report.table_1.total_built_area} m2</Paper>
-            </Grid>
-
+          <Grid item xs={12} sm={9} lg={9} >
+            <grid container spacing={0}>
+              <Grid item xs={12} >
+              <Grid container spacing={1} >
+                <Grid item xs={12}>Efficiency {solution.reports.units_report.table_1.efficiency} %</Grid>
+                <Grid item xs={12}>NLA {solution.reports.units_report.table_1.nla} m2</Grid>
+                <Grid item xs={12}>Total Built Area {solution.reports.units_report.table_1.total_built_area} m2</Grid>
+              </Grid>
+              </Grid>
+              <Grid item xs={12} >
+              <MyTable rows={table_2} columns={['', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
+              </Grid>
+            </grid>
+            
           </Grid>
 
-          <Grid item xs={12} sm={12} lg={12} className='Mydiv'>
-            <MyTable rows={table_2} columns={['name', 'number_of_units', 'ratio_by_num_of_units', 'ratio_by_nla', 'ratio_by_total_built_area']} caption={'Units Table'} />
-          </Grid>
+
         </ChartsSection>
 }        
         { project_cost && project_cost.length > 0 && 

@@ -20,6 +20,7 @@ const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, xaxixEnabled, sh
         indexScale={{ type: 'band', round: true }}
         colors={colors || { scheme: 'blues'}}
         colorBy="indexValue"
+        enableGridY={false}
         axisBottom={xaxixEnabled ? {
             tickSize: 5,
             tickPadding: 5,

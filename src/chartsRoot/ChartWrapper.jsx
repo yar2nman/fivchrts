@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,13 +30,16 @@ const ChartWrapper = ({ children, name }) => {
   const classes = useStyles();
   return (
     <>
-      <div className={classes.root}>
-        {name && <span className={classes.chartName}>{name}</span>}
-        {/* {children} */} 
-        <div className={classes.child}>
+    <Grid container spacing={0}>
+      <Grid item xs={12}>{name}</Grid>
+      
+      
+      <Grid item xs={12} style={{height: 200 + 'px',}}>
         {children}
-      </div>
-      </div>
+      </Grid>
+
+    </Grid>
+     
      
     </>
   );
