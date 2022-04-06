@@ -184,6 +184,7 @@ function App() {
         return response.json();
       })
       .then(function (myJson) {
+        localStorage.setItem('data',JSON.stringify(myJson))
         setData(myJson.solutions);
       });
   }
@@ -300,7 +301,7 @@ function App() {
               {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
             <ChartWrapper name={'Pre Construction Cost'} height={300}>
             <MyResponsiveBar data={table_2_pre_construction} keys={['ratio']} indexby={'id'} 
-                              ytitle={''} xtitle={'Pre-construction cost'} 
+                              ytitle={''} xtitle={'Pre-Construction (%)'} 
                               showLegends={false} isHorizontal={true}
                               margin={{ top: 3, right: 3, bottom: 3, left: 120 }} 
                               />
@@ -311,7 +312,7 @@ function App() {
               {table_3_construction && table_3_construction?.length > 0 &&
             <ChartWrapper name={'Construction Cost Chart'}>
             <MyResponsiveBar data={table_3_construction} keys={['ratio']} indexby={'id'}
-                              ytitle={''} xtitle={'Construction Cost'} height={300}
+                              ytitle={''} xtitle={'Construction (%)'} height={300}
                               showLegends={false} isHorizontal={true}
                               margin={{ top: 3, right: 3, bottom: 3, left: 120 }}
                                />
