@@ -10,6 +10,12 @@ import { FormControl, InputLabel, MenuItem, Select, Paper } from '@material-ui/c
 import ChartsSection from './chartsRoot/ChartsSection';
 import MyTable from './chartsRoot/Table';
 
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 const getName = (str = '') => {
   return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1))
   .join(' ');
@@ -188,61 +194,130 @@ function App() {
 
   return (
     <>
-    {/* <TopBar/> */}
     <div className={classes.root}>
+
+        {/* <SelectSolution /> */}
         {data && data?.length > 0 &&
-              <FormControl className={classes.formControl}>
-                <InputLabel id="solutions-select-label">Select Solution</InputLabel>
-                <Select defaultValue={''}
-                  labelId="solutions-select-label"
-                  id="solutions-select"
-                  value={solution?.solution_name || ''}
-                  onChange={d => setSolutionData(d.target.value)}
-                  
-                >
-                  {data.map((item) =>
-                    <MenuItem value={item.solution_name}
-                     key={item?.solution_name}>{getName(item.solution_name)}</MenuItem>
-                  )}
-                </Select>
-              </FormControl>
+          SelectSolution(data, classes, solution, setSolutionData)
         }
+
+
+        {/* -------------------------------------------------Accordion Area------------------------------------------------- */}
+     {graph_built_area && graph_built_area?.length > 0 && 
+     
+    //  --------------------------------unit report--------------------------------
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>Units Report</Typography>
+          </AccordionSummary>
+            <AccordionDetails>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6} lg={6}>
+                  <ChartWrapper name={'Built Area (m2)'} >
+                    <MyResponsiveBar data={graph_built_area} keys={['value']} indexby={'id'}
+                      xtitle={' '} xaxixEnabled={false} isHorizontal={true} colors={{ scheme: 'reds' }}
+                      margin={{ top: 0, right: 10, bottom: 0, left: 80 }} />
+                  </ChartWrapper>
+                </Grid>
+
+                <Grid item xs={12} sm={6} lg={6} >
+                  <grid container spacing={0}>
+                    <Grid item xs={12} >
+                      <Grid container spacing={1} >
+                        <Grid item xs={12}>Efficiency {solution.reports.units_report.table_1.efficiency.toLocaleString()} %</Grid>
+                        <Grid item xs={12}>NLA {solution.reports.units_report.table_1.nla.toLocaleString()} m2</Grid>
+                        <Grid item xs={12}>Total Built Area {solution.reports.units_report.table_1.total_built_area.toLocaleString()} m2</Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12} >
+                      <MyTable rows={table_2} columns={['', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
+                    </Grid>
+                  </grid>
+
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+        </Accordion>
+    }
+
+
+{/* --------------------------------Economic Report-------------------------------- */}
+{table_1_soft_costs && table_1_soft_costs?.length > 0 &&
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <Typography className={classes.heading}>Economic Report</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid container spacing={1}>
+            <Grid container spacing={1} xs={12}>
+              <Grid item xs={12} sm={4} lg={4}>
+                <MyTable columns={['Item', 'Cost']}
+                          rows={table_1_soft_costs.map((r) => [r.id, r.value])} 
+                          includeTotals={true}
+                          caption={'Soft Costs'}
+                 />
+              </Grid>
+              <Grid item xs={12} sm={4} lg={4}>
+                <MyTable columns={['Item', 'Cost']} 
+                rows={table_2_pre_construction.map(r => [r.id, r.value])} 
+                includeTotals={true}
+                caption={'Pre-Construction'} 
+                />
+              </Grid>
+              <Grid item xs={12} sm={4} lg={4}>
+                <MyTable columns={['Unit', 'Cost']}
+                          rows={table_3_construction.map(r => [r.id, r.value])}
+                          includeTotals={true}
+                          caption={'Construction'} 
+                          />
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={1} xs={12}>
+              <Grid item xs={12} sm={4} lg={4}>
+
+              </Grid>
+              <Grid item xs={12} sm={4} lg={4}>
+
+              </Grid>
+              <Grid item xs={12} sm={4} lg={4}>
+
+              </Grid>
+            </Grid>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+}
+
+        {/* --------------------------Environmental Report-------------------------- */}
+
+        <Accordion >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel3a-content"
+            id="panel3a-header"
+          >
+            <Typography className={classes.heading}>Disabled Accordion</Typography>
+          </AccordionSummary>
+        </Accordion>
+
+
+        {/* -------------------------------------------------Accordion Area------------------------------------------------- */}
 
 
       <Grid  container spacing={1}>
 
 
-        {/* Unit Reports  */}
-{graph_built_area && graph_built_area?.length > 0 &&
-        <ChartsSection title={'Units Report'}>
-
-          <Grid item xs={12} sm={6} lg={6}>
-            <ChartWrapper name={'Built Area (m2)'} >
-              <MyResponsiveBar data={graph_built_area} keys={['value']} indexby={'id'} 
-              xtitle={' '} xaxixEnabled={false} isHorizontal={true} colors={{scheme: 'reds'}}
-              margin={{ top: 0, right: 10, bottom: 0, left: 80 }}/>
-            </ChartWrapper>
-          </Grid>
-
-          <Grid item xs={12} sm={6} lg={6} >
-            <grid container spacing={0}>
-              <Grid item xs={12} >
-              <Grid container spacing={1} >
-                <Grid item xs={12}>Efficiency {solution.reports.units_report.table_1.efficiency.toLocaleString()} %</Grid>
-                <Grid item xs={12}>NLA {solution.reports.units_report.table_1.nla.toLocaleString()} m2</Grid>
-                <Grid item xs={12}>Total Built Area {solution.reports.units_report.table_1.total_built_area.toLocaleString()} m2</Grid>
-              </Grid>
-              </Grid>
-              <Grid item xs={12} >
-              <MyTable rows={table_2} columns={['', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
-              </Grid>
-            </grid>
-            
-          </Grid>
-
-
-        </ChartsSection>
-}        
+      
+       
         { project_cost && project_cost.length > 0 && 
         <ChartsSection title="Economic Report">
           <Grid item xs={12} sm={6} lg={6}  className='Mydiv'>
@@ -331,6 +406,29 @@ function App() {
     </div>
     </>
   );
+}
+
+
+function SelectSolution(data, classes, solution, setSolutionData) {
+  return (
+  <>
+    <FormControl className={classes.formControl}>
+      <InputLabel id="solutions-select-label">Select Solution</InputLabel>
+      <Select defaultValue={''}
+        labelId="solutions-select-label"
+        id="solutions-select"
+        value={solution?.solution_name || ''}
+        onChange={d => setSolutionData(d.target.value)}
+        
+      >
+        {data.map((item) =>
+          <MenuItem value={item.solution_name}
+           key={item?.solution_name}>{getName(item.solution_name)}</MenuItem>
+        )}
+      </Select>
+    </FormControl>
+</>
+)
 }
 
 export default App;
