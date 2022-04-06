@@ -6,7 +6,7 @@ import MyResponsivePie from './chartsRoot/PiChart';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ChartWrapper from './chartsRoot/ChartWrapper';
-import { FormControl, InputLabel, MenuItem, Select, Paper } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import ChartsSection from './chartsRoot/ChartsSection';
 import MyTable from './chartsRoot/Table';
 
@@ -50,8 +50,8 @@ function App() {
 
   const [data, setData] = useState([]);
   const [solution, setsolution] = useState({});
-  const [solutionName, setsolutionName] = useState({});
-  const [solutionIncome, setsolutionIncome] = useState({});
+  // const [solutionName, setsolutionName] = useState({});
+  // const [solutionIncome, setsolutionIncome] = useState({});
 
   const [project_cost, setproject_cost] = useState([]);
   const [table_1_soft_costs, settable_1_soft_costs] = useState({});
@@ -71,8 +71,8 @@ function App() {
   const setSolutionData = (solution_name) => {
     let solution = data.find(x => x.solution_name === solution_name)
     setsolution(solution);
-    setsolutionName(solution.solution_name)
-    setsolutionIncome(solution.reports.economic_report.income)
+    // setsolutionName(solution.solution_name)
+    // setsolutionIncome(solution.reports.economic_report.income)
 
     setProjectCost();
     settable1soft_costs();
@@ -119,6 +119,7 @@ function App() {
 
     function settable3construction() {
       let t3c = [];
+      // eslint-disable-next-line
       for (const [key, vlaue] of Object.entries(solution.reports.economic_report.table_3_construction)) {
         t3c.push({ 'id': vlaue.name, 'label': vlaue.name, 'value': vlaue.cost, 'ratio': vlaue.ratio });
         settable_3_construction(t3c);
@@ -147,6 +148,7 @@ function App() {
     // Graph Built Area
     function setGraphBuiltArea() {
       let gba = [];
+      // eslint-disable-next-line
       for (const [key, vlaue] of Object.entries(solution.reports.units_report.graph_built_area)) {
         gba.push({ 'id': getName(vlaue.name), 'label': getName(vlaue.name), 'value': vlaue.area_by_unit });
         setgraph_built_area(gba);
@@ -157,6 +159,7 @@ function App() {
     // Table 2
     function settable2() {
       let t2 = [];
+      // eslint-disable-next-line
       for (const [key, vlaue] of Object.entries(solution.reports.units_report.table_2)) {
         t2.push([vlaue.name, vlaue.number_of_units, vlaue.ratio_by_num_of_units, vlaue.ratio_by_nla, vlaue.ratio_by_total_built_area]);
         
@@ -256,8 +259,8 @@ function App() {
             <Typography className={classes.heading}>Economic Report</Typography>
           </AccordionSummary>
           <AccordionDetails>
+            <Grid container spacing={2}>
             <Grid container spacing={1}>
-            <Grid container spacing={1} xs={12}>
               <Grid item xs={12} sm={4} lg={4}>
                 <MyTable columns={['Item', 'Cost']}
                           rows={table_1_soft_costs.map((r) => [r.id, r.value])} 
@@ -283,13 +286,37 @@ function App() {
 
             <Grid container spacing={1} xs={12}>
               <Grid item xs={12} sm={4} lg={4}>
-
+                    {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
+                        <ChartWrapper name={'Soft Costs (%)'} height={300}>
+                          <MyResponsiveBar data={table_1_soft_costs} keys={['ratio']} indexby={'id'} 
+                                            ytitle={''} xtitle={'Soft Costs'} 
+                                            showLegends={false} isHorizontal={true}
+                                            margin={{ top: 3, right: 3, bottom: 3, left: 120 }} 
+                                            />
+                        </ChartWrapper>
+                    }
               </Grid>
               <Grid item xs={12} sm={4} lg={4}>
-
+              {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
+            <ChartWrapper name={'Pre Construction Cost'} height={300}>
+            <MyResponsiveBar data={table_2_pre_construction} keys={['ratio']} indexby={'id'} 
+                              ytitle={''} xtitle={'Pre-construction cost'} 
+                              showLegends={false} isHorizontal={true}
+                              margin={{ top: 3, right: 3, bottom: 3, left: 120 }} 
+                              />
+            </ChartWrapper>
+        }
               </Grid>
               <Grid item xs={12} sm={4} lg={4}>
-
+              {table_3_construction && table_3_construction?.length > 0 &&
+            <ChartWrapper name={'Construction Cost Chart'}>
+            <MyResponsiveBar data={table_3_construction} keys={['ratio']} indexby={'id'}
+                              ytitle={''} xtitle={'Construction Cost'} height={300}
+                              showLegends={false} isHorizontal={true}
+                              margin={{ top: 3, right: 3, bottom: 3, left: 120 }}
+                               />
+            </ChartWrapper>
+        }
               </Grid>
             </Grid>
             </Grid>
@@ -331,28 +358,9 @@ function App() {
             <MyResponsiveBar data={project_cost} keys={['ratio']} indexby={'id'}  ytitle={'cost %'} xtitle={'cost item'} showLegends={false} isHorizontal={false} />
             </ChartWrapper>
           </Grid>
-        {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
-          <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
-            <ChartWrapper name={'Soft Cost'}>
-            <MyResponsiveBar data={table_1_soft_costs} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Soft Costs'} showLegends={false} isHorizontal={true}
-            margin={{top: 50, right: 30, bottom: 50, left: 120 }} />
-            </ChartWrapper>
-          </Grid>
-        }
-        {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
-          <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
-            <ChartWrapper name={'Pre Construction Cost'}>
-            <MyResponsiveBar data={table_2_pre_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Pre-construction cost'} showLegends={false} isHorizontal={false} />
-            </ChartWrapper>
-          </Grid>
-        }
-        {table_3_construction && table_3_construction?.length > 0 &&
-          <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
-            <ChartWrapper name={'Construction Cost Chart'}>
-            <MyResponsiveBar data={table_3_construction} keys={['value']} indexby={'id'} ytitle={''} xtitle={'Construction Cost'} showLegends={false} isHorizontal={false} />
-            </ChartWrapper>
-          </Grid>
-        }
+        
+        
+        
         <br/>
         </ChartsSection>
 }

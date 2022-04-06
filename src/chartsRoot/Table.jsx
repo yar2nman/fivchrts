@@ -43,7 +43,7 @@ export default function MyTable({rows, columns, align, caption, includeTotals}) 
       }
       setTotalRow(total)
     })
-  }, [])
+  }, [rows])
 
 
 
