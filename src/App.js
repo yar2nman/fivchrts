@@ -65,6 +65,9 @@ function App() {
   const [table_2, settable_2] = useState([]);
   const [table_1_flats_overall_income_dict, setttable_1_flats_overall_income_dict] = useState([]);
 
+  const [netZeroEnergy, settnetZeroEnergy] = useState([]);
+  const [netZeroCarpon, setnetZeroCarpon] = useState([]);
+
   
 
   
@@ -86,6 +89,28 @@ function App() {
     setGraphBuiltArea();
     settable2();
     settable_1_flatsoverallincomedict()
+
+    let nzenergy = [{title: 'Energy Consumption' , 
+    total_KWH_year: solution.reports.environmental_report.net_zero_building.energy.energy_consumption.total_kWh_year,
+    normalised_kWh_year_m2: solution.reports.environmental_report.net_zero_building.energy.energy_consumption.normalised_kWh_year_m2  },
+     {title: 'Energy Production',
+     total_KWH_year: solution.reports.environmental_report.net_zero_building.energy.energy_production.total_kWh_year,
+     normalised_kWh_year_m2: solution.reports.environmental_report.net_zero_building.energy.energy_production.normalised_kWh_year_m2
+    }]
+    console.log(nzenergy, 'nzenergy =======================>')
+    settnetZeroEnergy(nzenergy)
+
+
+    let nzcarpon = [{title: 'Savings' , 
+    total_tons_co2_year: solution.reports.environmental_report.net_zero_building.carbon.carbon_savings.total_tons_co2_year,
+    normalised_kgco2_m2_year: solution.reports.environmental_report.net_zero_building.carbon.carbon_savings.normalised_kgco2_m2_year  },
+     {title: 'Emissions',
+     total_tons_co2_year: solution.reports.environmental_report.net_zero_building.carbon.overall_emissions.total_tons_co2_year,
+     normalised_kgco2_m2_year: solution.reports.environmental_report.net_zero_building.carbon.overall_emissions.normalised_kgco2_m2_year
+    }]
+    console.log(nzcarpon, 'nzcarpon =======================>')
+    setnetZeroCarpon(nzcarpon)
+
 
     // settable_1_soft_costs(solution.reports.economic_report.table_1_soft_costs)
     // settable_2_pre_construction(solution.reports.economic_report.table_2_pre_construction)
@@ -182,6 +207,8 @@ function App() {
       setttable_1_flats_overall_income_dict(t1)
       console.log('table_1_flats_overall_income_dict', t1)
     }
+
+    
     
   }
 
@@ -394,8 +421,42 @@ function App() {
             {/* Net Zero Building */}
               <Grid item xs={12}>
                 <Grid container spacing={1}>
-                  <Grid item xs={12} md={12} lg={6}></Grid>
-                  <Grid item xs={12} md={12} lg={6}></Grid>
+                  <Grid item xs={12} md={6} lg={6}>
+                    {netZeroEnergy && netZeroEnergy?.length > 0 &&
+                    <>
+                      <ChartWrapper height={200} name={'Energy'}>
+                      <MyResponsiveBar data={netZeroEnergy} 
+                                        keys={['total_KWH_year']} 
+                                        indexby={'title'} 
+                                        isHorizontal={true}
+                                        colors={{'scheme': 'greens'}}
+                                        margin={{ top: 3, right: 3, bottom: 3, left: 120 }} />
+                    </ChartWrapper>
+                    <div>{`Yout building is ${solution.reports.environmental_report.net_zero_building.energy.net_zero.net_zero_percentage}% Net Zero Energy building. `}</div>
+                    <div>{`You will need another ${solution.reports.environmental_report.net_zero_building.energy.net_zero.offset_area.toLocaleString()} m2 of PV to offset its remaining energy consumption.
+`}</div>
+                    </>
+                    }
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={6}>
+                  {netZeroCarpon && netZeroCarpon?.length > 0 &&
+                  <>
+                      <ChartWrapper height={200} name={'Carbon'}>
+                      <MyResponsiveBar data={netZeroCarpon} 
+                                        keys={['total_tons_co2_year']} 
+                                        indexby={'title'} 
+                                        isHorizontal={true}
+                                        colors={{'scheme': 'greens'}}
+                                        margin={{ top: 3, right: 3, bottom: 3, left: 120 }} />
+                    </ChartWrapper>
+                    <div>{`Your building is ${solution.reports.environmental_report.net_zero_building.carbon.net_zero.net_zero_percentage}% Net Zero Carbon building. 
+`}</div>
+                    <div>{`You will need another ${solution.reports.environmental_report.net_zero_building.carbon.net_zero.offset_area.toLocaleString()} m2 of PV to offset its remaining energy consumption.`}
+</div>
+                    </>
+                    }
+
+                  </Grid>
                 </Grid>
               </Grid>
 
