@@ -15,6 +15,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+// import Paper from '@material-ui/core/Paper';
 
 
 const getName = (str = '') => {
@@ -68,6 +69,8 @@ function App() {
   const [netZeroEnergy, settnetZeroEnergy] = useState([]);
   const [netZeroCarpon, setnetZeroCarpon] = useState([]);
 
+  const [energy_consumption_breakwon, setenergy_consumption_breakwon] = useState([]);
+
   
 
   
@@ -110,6 +113,37 @@ function App() {
     }]
     console.log(nzcarpon, 'nzcarpon =======================>')
     setnetZeroCarpon(nzcarpon)
+
+    let ecb = []
+    ecb.push([
+    'kWh/year', 
+    solution.reports.environmental_report.energy_consumtion.consumption_breakdown.heating_consumption.total_kWh_year.toLocaleString(),
+    solution.reports.environmental_report.energy_consumtion.consumption_breakdown.cooling_consumption.total_kWh_year.toLocaleString(),
+    solution.reports.environmental_report.energy_consumtion.consumption_breakdown.lighting_consumption.total_kWh_year.toLocaleString(),
+    (
+      solution.reports.environmental_report.energy_consumtion.consumption_breakdown.heating_consumption.total_kWh_year +
+      solution.reports.environmental_report.energy_consumtion.consumption_breakdown.cooling_consumption.total_kWh_year +
+      solution.reports.environmental_report.energy_consumtion.consumption_breakdown.lighting_consumption.total_kWh_year
+  
+
+    ).toLocaleString()
+  ])
+    ecb.push(
+      ['kWh/year/m2', 
+      solution.reports.environmental_report.energy_consumtion.consumption_breakdown.heating_consumption.normalised_kWh_year_m2.toLocaleString(),
+      solution.reports.environmental_report.energy_consumtion.consumption_breakdown.cooling_consumption.normalised_kWh_year_m2.toLocaleString(),
+      solution.reports.environmental_report.energy_consumtion.consumption_breakdown.lighting_consumption.normalised_kWh_year_m2.toLocaleString(),
+      (
+        solution.reports.environmental_report.energy_consumtion.consumption_breakdown.heating_consumption.normalised_kWh_year_m2 +
+        solution.reports.environmental_report.energy_consumtion.consumption_breakdown.cooling_consumption.normalised_kWh_year_m2 +
+        solution.reports.environmental_report.energy_consumtion.consumption_breakdown.lighting_consumption.normalised_kWh_year_m2
+  
+      ).toLocaleString()
+   ])
+
+   console.log(ecb, 'setenergy_consumption_breakwon ==================>')
+
+  setenergy_consumption_breakwon(ecb)
 
 
     // settable_1_soft_costs(solution.reports.economic_report.table_1_soft_costs)
@@ -303,7 +337,7 @@ function App() {
             <AccordionDetails>
               <Grid container spacing={2}>
                 <Grid container spacing={1}>
-                  <Grid item spacing={2} xs={12} sm={6} lg={6}>
+                  <Grid item xs={12} sm={6} lg={6}>
                   <MyTable rows={project_cost.map(r => [r.id, r.value])} 
                       columns={['Item', 'Cost']} 
                       includeTotals={true} 
@@ -311,7 +345,7 @@ function App() {
 
                   </Grid>
                   {project_cost && project_cost.length > 0 &&
-                    <Grid item spacing={2} xs={12} sm={6} lg={6} >
+                    <Grid item xs={12} sm={6} lg={6} >
                       <ChartWrapper name={'Project Cost %'} height={300}>
                         <MyResponsivePie data={project_cost.map(r => {
                          return {id: r.id, value: r.ratio}
@@ -384,14 +418,14 @@ function App() {
 
                  {/* Income Tab */}
               <Grid container spacing={2} >
-                <Grid item xs={6} sm={6} lg={6}>
-                  <MyTable columns={['Unit', 'Income']}
-                    rows={table_1_flats_overall_income_dict}
-                    caption={'Income Analysis'}
-                    includeTotals={true}
-                  />
+                <Grid item xs={12} sm={6} lg={6}>
+                    <MyTable columns={['Unit', 'Income']}
+                      rows={table_1_flats_overall_income_dict}
+                      caption={'Income Analysis'}
+                      includeTotals={true}
+                    />
                 </Grid>
-                <Grid item xs={6} sm={6} lg={6}>
+                <Grid item xs={12} sm={6} lg={6}>
                   <p><b>Project total income</b>      {solution.reports.economic_report.income.project_total_income.toLocaleString()}</p>
                   <p><b>Profit</b>      {solution.reports.economic_report.income.profit.toLocaleString()}</p>
                   <p><b>Simple ROI</b>      {solution.reports.economic_report.income.simple_roi.toLocaleString()}</p>
@@ -461,7 +495,13 @@ function App() {
               </Grid>
 
               {/* Energy Consumption */}
-              <Grid item xs={12}></Grid>
+              <Grid item xs={12}>
+              {energy_consumption_breakwon && energy_consumption_breakwon.length > 0 &&
+                    <MyTable columns={[' ', 'Heating', 'Cooling', 'Lighting', 'Total']}
+                    rows={energy_consumption_breakwon}/>
+              
+}
+              </Grid>
 
               {/* Life Cycle Carbon */}
               <Grid item xs={12}></Grid>
