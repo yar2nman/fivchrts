@@ -386,6 +386,27 @@ function App() {
           >
             <Typography className={classes.heading}>Environmental Report</Typography>
           </AccordionSummary>
+          <AccordionDetails>
+
+          {/* Environmental Report */}
+            <Grid container spacing={1}>
+
+            {/* Net Zero Building */}
+              <Grid item xs={12}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={12} lg={6}></Grid>
+                  <Grid item xs={12} md={12} lg={6}></Grid>
+                </Grid>
+              </Grid>
+
+              {/* Energy Consumption */}
+              <Grid item xs={12}></Grid>
+
+              {/* Life Cycle Carbon */}
+              <Grid item xs={12}></Grid>
+
+            </Grid>
+          </AccordionDetails>
         </Accordion>
 
 
@@ -394,33 +415,6 @@ function App() {
 
       <Grid  container spacing={1}>
 
-
-      
-       
-        { project_cost && project_cost.length > 0 && 
-        <ChartsSection title="Economic Report">
-          <Grid item xs={12} sm={6} lg={6}  className='Mydiv'>
-            <ChartWrapper name={'Project Cost'}>
-            <MyResponsivePie data={project_cost} />
-            </ChartWrapper>
-          </Grid>
-
-          <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
-            <ChartWrapper name={'Project Cost %'}>
-            <MyResponsiveBar data={project_cost} keys={['ratio']} indexby={'id'}  ytitle={'cost %'} xtitle={'cost item'} showLegends={false} isHorizontal={false} />
-            </ChartWrapper>
-          </Grid>
-        
-        
-        
-        <br/>
-        </ChartsSection>
-}
-        {/* Economic cost */}
-        {/* Cost breakdown */}
-        {/* Income */}
-        {/* Net Zero Building */}
-        {/* Energy Consumption */}
 
         {consumption_breakdown && consumption_breakdown?.length > 0 && <ChartsSection title="Environmental Report">
         <Grid item xs={12} sm={6} lg={6} className='Mydiv'>
