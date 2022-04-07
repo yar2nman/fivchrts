@@ -16,6 +16,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+
 const getName = (str = '') => {
   return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1))
   .join(' ');
@@ -62,6 +63,7 @@ function App() {
   const [embodied_carbon_breakdown, setembodied_carbon_breakdown] = useState([]);
   const [graph_built_area, setgraph_built_area] = useState([]);
   const [table_2, settable_2] = useState([]);
+  const [table_1_flats_overall_income_dict, setttable_1_flats_overall_income_dict] = useState([]);
 
   
 
@@ -83,6 +85,7 @@ function App() {
     setEmbodiedCarbonBreakdown();
     setGraphBuiltArea();
     settable2();
+    settable_1_flatsoverallincomedict()
 
     // settable_1_soft_costs(solution.reports.economic_report.table_1_soft_costs)
     // settable_2_pre_construction(solution.reports.economic_report.table_2_pre_construction)
@@ -168,6 +171,17 @@ function App() {
       settable_2(t2);
       console.log('table 2', t2);
     }
+
+    // table_1_flats_overall_income_dict
+    function settable_1_flatsoverallincomedict(){
+      let t1 = []
+      // eslint-disable-next-line
+      for (const [key, vlaue] of Object.entries(solution.reports.economic_report.income.table_1_flats_overall_income_dict)) {
+        t1.push([vlaue.name, vlaue.income]);     
+      }
+      setttable_1_flats_overall_income_dict(t1)
+      console.log('table_1_flats_overall_income_dict', t1)
+    }
     
   }
 
@@ -229,7 +243,7 @@ function App() {
                 </Grid>
 
                 <Grid item xs={12} sm={6} lg={6} >
-                  <grid container spacing={0}>
+                  <Grid container spacing={0}>
                     <Grid item xs={12} >
                       <Grid container spacing={1} >
                         <Grid item xs={12}>Efficiency {solution.reports.units_report.table_1.efficiency.toLocaleString()} %</Grid>
@@ -238,9 +252,9 @@ function App() {
                       </Grid>
                     </Grid>
                     <Grid item xs={12} >
-                      <MyTable rows={table_2} columns={['', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
+                      <MyTable rows={table_2} columns={['temp', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
                     </Grid>
-                  </grid>
+                  </Grid>
 
                 </Grid>
               </Grid>
@@ -251,78 +265,115 @@ function App() {
 
 {/* --------------------------------Economic Report-------------------------------- */}
 {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-          >
-            <Typography className={classes.heading}>Economic Report</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid container spacing={2}>
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={4} lg={4}>
-                <MyTable columns={['Item', 'Cost']}
-                          rows={table_1_soft_costs.map((r) => [r.id, r.value])} 
-                          includeTotals={true}
-                          caption={'Soft Costs'}
-                 />
-              </Grid>
-              <Grid item xs={12} sm={4} lg={4}>
-                <MyTable columns={['Item', 'Cost']} 
-                rows={table_2_pre_construction.map(r => [r.id, r.value])} 
-                includeTotals={true}
-                caption={'Pre-Construction'} 
-                />
-              </Grid>
-              <Grid item xs={12} sm={4} lg={4}>
-                <MyTable columns={['Unit', 'Cost']}
-                          rows={table_3_construction.map(r => [r.id, r.value])}
-                          includeTotals={true}
-                          caption={'Construction'} 
-                          />
-              </Grid>
-            </Grid>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2a-content"
+              id="panel2a-header"
+            >
+              <Typography className={classes.heading}>Economic Report</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container spacing={2}>
+                <Grid container spacing={1}>
+                  <Grid item spacing={2} xs={12} sm={6} lg={6}>
+                  <MyTable rows={project_cost.map(r => [r.id, r.value])} 
+                      columns={['Item', 'Cost']} 
+                      includeTotals={true} 
+                      />
 
-            <Grid container spacing={1} xs={12}>
-              <Grid item xs={12} sm={4} lg={4}>
+                  </Grid>
+                  {project_cost && project_cost.length > 0 &&
+                    <Grid item spacing={2} xs={12} sm={6} lg={6} >
+                      <ChartWrapper name={'Project Cost %'} height={300}>
+                        <MyResponsivePie data={project_cost.map(r => {
+                         return {id: r.id, value: r.ratio}
+                          })}  />
+                      </ChartWrapper>
+                    </Grid>
+                  }
+                </Grid>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} sm={4} lg={4}>
+                    <MyTable columns={['Item', 'Cost']}
+                      rows={table_1_soft_costs.map((r) => [r.id, r.value])}
+                      includeTotals={true}
+                      caption={'Soft Costs'}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4} lg={4}>
+                    <MyTable columns={['Item', 'Cost']}
+                      rows={table_2_pre_construction.map(r => [r.id, r.value])}
+                      includeTotals={true}
+                      caption={'Pre-Construction'}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4} lg={4}>
+                    <MyTable columns={['Unit', 'Cost']}
+                      rows={table_3_construction.map(r => [r.id, r.value])}
+                      includeTotals={true}
+                      caption={'Construction'}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} >
+                  <Grid item xs={12} sm={4} lg={4}>
                     {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
-                        <ChartWrapper name={'Soft Costs (%)'} height={300}>
-                          <MyResponsiveBar data={table_1_soft_costs} keys={['ratio']} indexby={'id'} 
-                                            ytitle={''} xtitle={'Soft Costs'} 
-                                            showLegends={false} isHorizontal={true}
-                                            margin={{ top: 3, right: 3, bottom: 3, left: 120 }} 
-                                            />
-                        </ChartWrapper>
+                      <ChartWrapper name={'Soft Costs (%)'} height={300}>
+                        <MyResponsiveBar data={table_1_soft_costs} keys={['ratio']} indexby={'id'}
+                          ytitle={''} xtitle={'Soft Costs'}
+                          showLegends={false} isHorizontal={true}
+                          margin={{ top: 3, right: 3, bottom: 3, left: 120 }}
+                        />
+                      </ChartWrapper>
                     }
+                  </Grid>
+                  <Grid item xs={12} sm={4} lg={4}>
+                    {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
+                      <ChartWrapper name={'Pre Construction Cost'} height={300}>
+                        <MyResponsiveBar data={table_2_pre_construction} keys={['ratio']} indexby={'id'}
+                          ytitle={''} xtitle={'Pre-Construction (%)'}
+                          showLegends={false} isHorizontal={true}
+                          margin={{ top: 3, right: 3, bottom: 3, left: 120 }}
+                        />
+                      </ChartWrapper>
+                    }
+                  </Grid>
+                  <Grid item xs={12} sm={4} lg={4}>
+                    {table_3_construction && table_3_construction?.length > 0 &&
+                      <ChartWrapper name={'Construction Cost Chart'}>
+                        <MyResponsiveBar data={table_3_construction} keys={['ratio']} indexby={'id'}
+                          ytitle={''} xtitle={'Construction (%)'} height={300}
+                          showLegends={false} isHorizontal={true}
+                          margin={{ top: 3, right: 3, bottom: 3, left: 120 }}
+                        />
+                      </ChartWrapper>
+                    }
+                  </Grid>
+                </Grid>
+
+
+
+                 {/* Income Tab */}
+              <Grid container spacing={2} >
+                <Grid item xs={6} sm={6} lg={6}>
+                  <MyTable columns={['Unit', 'Income']}
+                    rows={table_1_flats_overall_income_dict}
+                    caption={'Income Analysis'}
+                    includeTotals={true}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} lg={6}>
+                  <p><b>Project total income</b>      {solution.reports.economic_report.income.project_total_income.toLocaleString()}</p>
+                  <p><b>Profit</b>      {solution.reports.economic_report.income.profit.toLocaleString()}</p>
+                  <p><b>Simple ROI</b>      {solution.reports.economic_report.income.simple_roi.toLocaleString()}</p>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={4} lg={4}>
-              {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
-            <ChartWrapper name={'Pre Construction Cost'} height={300}>
-            <MyResponsiveBar data={table_2_pre_construction} keys={['ratio']} indexby={'id'} 
-                              ytitle={''} xtitle={'Pre-Construction (%)'} 
-                              showLegends={false} isHorizontal={true}
-                              margin={{ top: 3, right: 3, bottom: 3, left: 120 }} 
-                              />
-            </ChartWrapper>
-        }
               </Grid>
-              <Grid item xs={12} sm={4} lg={4}>
-              {table_3_construction && table_3_construction?.length > 0 &&
-            <ChartWrapper name={'Construction Cost Chart'}>
-            <MyResponsiveBar data={table_3_construction} keys={['ratio']} indexby={'id'}
-                              ytitle={''} xtitle={'Construction (%)'} height={300}
-                              showLegends={false} isHorizontal={true}
-                              margin={{ top: 3, right: 3, bottom: 3, left: 120 }}
-                               />
-            </ChartWrapper>
-        }
-              </Grid>
-            </Grid>
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
+             
+            </AccordionDetails>
+          </Accordion>
 }
 
         {/* --------------------------Environmental Report-------------------------- */}
@@ -333,7 +384,7 @@ function App() {
             aria-controls="panel3a-content"
             id="panel3a-header"
           >
-            <Typography className={classes.heading}>Disabled Accordion</Typography>
+            <Typography className={classes.heading}>Environmental Report</Typography>
           </AccordionSummary>
         </Accordion>
 
@@ -441,3 +492,6 @@ function SelectSolution(data, classes, solution, setSolutionData) {
 }
 
 export default App;
+
+
+
