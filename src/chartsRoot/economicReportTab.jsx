@@ -184,7 +184,7 @@ export default function EconomicReportTab({project_cost, table_1_soft_costs,
                   </Grid>
                   <Grid item xs={12} sm={4} lg={4}>
                     {table_2_pre_construction && table_2_pre_construction?.length > 0 &&
-                      <ChartWrapper name={'Pre Construction Cost'} height={300}>
+                      <ChartWrapper name={'Pre-Construction (%)'} height={300}>
                         <MyResponsiveBar data={table_2_pre_construction} keys={['ratio']} indexby={'id'}
                           ytitle={''} xtitle={'Pre-Construction (%)'}
                           showLegends={false} isHorizontal={true}
@@ -195,7 +195,7 @@ export default function EconomicReportTab({project_cost, table_1_soft_costs,
                   </Grid>
                   <Grid item xs={12} sm={4} lg={4}>
                     {table_3_construction && table_3_construction?.length > 0 &&
-                      <ChartWrapper name={'Construction Cost Chart'}>
+                      <ChartWrapper name={'Construction (%)'}>
                         <MyResponsiveBar data={table_3_construction} keys={['ratio']} indexby={'id'}
                           ytitle={''} xtitle={'Construction (%)'} height={300}
                           showLegends={false} isHorizontal={true}

@@ -5,7 +5,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
     width: "100%",
-    // marginBottom: theme.spacing(6),
     marginTop: theme.spacing(6),
   },
 }));

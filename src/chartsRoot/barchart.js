@@ -1,12 +1,9 @@
 import React from 'react';
 
 import { ResponsiveBar } from '@nivo/bar'
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
-const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, xaxixEnabled, showLegends, isHorizontal, myonclick, margin, colors, axisBottomTickRotation, axisBottomlegendOffset  /* data prop */ }) => (
+
+const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, xaxixEnabled, leftaxisdisabled,
+     showLegends, isHorizontal, myonclick, margin, colors, axisBottomTickRotation, axisBottomlegendOffset, colorBy  /* data prop */ }) => (
     <ResponsiveBar
         data={data}
         onClick={myonclick}
@@ -19,7 +16,7 @@ const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, xaxixEnabled, sh
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
         colors={colors || { scheme: 'blues'}}
-        colorBy="indexValue"
+        colorBy= {colorBy || "indexValue"}
         enableGridY={false}
         axisBottom={xaxixEnabled ? {
             tickSize: 5,
@@ -29,7 +26,7 @@ const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, xaxixEnabled, sh
             legendPosition: 'middle',
             legendOffset: axisBottomlegendOffset || 32
         } : null}
-        axisLeft={{
+        axisLeft={!leftaxisdisabled?{
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
@@ -37,7 +34,7 @@ const MyResponsiveBar = ({ data, keys, indexby, ytitle, xtitle, xaxixEnabled, sh
             legendPosition: 'middle',
             legendOffset: -40,
             format: value => `${ isNaN(value)? value : Number(value).toLocaleString()}`,
-        }}
+        }: null}
         labelSkipWidth={12}
         labelSkipHeight={12}
         labelTextColor={{

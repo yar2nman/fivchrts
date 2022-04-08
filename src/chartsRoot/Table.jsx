@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
@@ -21,13 +22,13 @@ export default function MyTable({rows, columns, align, caption, includeTotals}) 
 
   columns = columns || [] // List of table headers
   rows = rows || [[]] // List of List containing table rows each row in a list
-  align = align || 'left' // Alignment of table cells and columns
+  align = 'center' // Alignment of table cells and columns
   caption = caption || '' // Table caption shown belwo the table to the left
   const [TotalRow, setTotalRow] = useState([]);
   
  
   useEffect(() => {
-    let total  = []
+    let total = []
 
     rows.forEach(row => {
       if (total.length === 0) {
@@ -39,7 +40,7 @@ export default function MyTable({rows, columns, align, caption, includeTotals}) 
           }else {
           return value + row[index]
           }
-        })     
+        })
       }
       setTotalRow(total)
     })
@@ -49,39 +50,40 @@ export default function MyTable({rows, columns, align, caption, includeTotals}) 
 
  
   return (
-    <TableContainer component={Paper}>
+    <Grid container spacing={1} >
+
+      <Grid item xs={12}>
+        <b>{caption}</b>
+      </Grid>
+      <Grid item xs={12}>
+      <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="caption table">
-      { caption && <caption>{caption}</caption>}
         <TableHead>
-          <TableRow>
-            {columns.map((column) => (
-                <TableCell key={column} align={'center'}>
-                    <i><b>{column}</b></i>
-                </TableCell>
+          <TableRow>{columns.map((column) => (<TableCell key={column} align={'center'}><b>{column}</b></TableCell>
             ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
+            </TableRow>
+            </TableHead>
+            <TableBody>
           {rows.map((row) => (
             <TableRow key={row}>
                 {row.map((item) => (
-                    <TableCell key={item} align={'left'}>
-                        {isNaN(item)? item: item.toLocaleString()}
-                    </TableCell>
+                    <TableCell key={item} align={'center'}>{isNaN(item)? item: item.toLocaleString()}</TableCell>
                 ))}
             </TableRow>
           ))}
-          {includeTotals &&
-            <TableRow>
+          {
+          includeTotals?
+            (<TableRow>
             {TotalRow.map((item, i) => (
-                <TableCell key={i} align={'left'} className='totalCell'>
-                    {item.toLocaleString()}
-                </TableCell>
+                <TableCell key={i} align={'center'} className='totalCell'>{item.toLocaleString()}</TableCell>
             ))}
-          </TableRow>
+          </TableRow>): null
         }
         </TableBody>
       </Table>
     </TableContainer>
+      </Grid>
+    
+    </Grid>
   );
 }
