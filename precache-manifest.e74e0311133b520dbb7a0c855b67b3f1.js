@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9d301281f2012a5be217a3f523ab3b04",
+    "revision": "8be666c8e8bed05f4562886195ea0c0c",
     "url": "/fivchrts/index.html"
   },
   {
-    "revision": "1c7037f56da0d6ffe30b",
+    "revision": "627a6b034460b6d65c16",
     "url": "/fivchrts/static/css/main.f95a07fa.chunk.css"
   },
   {
-    "revision": "f9067dae433206990f34",
-    "url": "/fivchrts/static/js/2.ca7243e9.chunk.js"
+    "revision": "f6149bcaddc18b63b507",
+    "url": "/fivchrts/static/js/2.410ccd02.chunk.js"
   },
   {
     "revision": "dd9f55bc75bdab775decfd7db718a1e0",
-    "url": "/fivchrts/static/js/2.ca7243e9.chunk.js.LICENSE.txt"
+    "url": "/fivchrts/static/js/2.410ccd02.chunk.js.LICENSE.txt"
   },
   {
     "revision": "6afb6b82b6c5dfb9dc82",
     "url": "/fivchrts/static/js/3.ff86fa14.chunk.js"
   },
   {
-    "revision": "1c7037f56da0d6ffe30b",
-    "url": "/fivchrts/static/js/main.b28211d6.chunk.js"
+    "revision": "627a6b034460b6d65c16",
+    "url": "/fivchrts/static/js/main.d629b192.chunk.js"
   },
   {
     "revision": "d597fb5edb8a6ef2d390",
