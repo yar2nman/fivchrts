@@ -140,8 +140,8 @@ export default function EconomicReportTab({project_cost, table_1_soft_costs,
                   {
                   table_1_soft_costs &&
                     <Grid item xs={12} sm={4} lg={4}>
-                    <MyTable columns={['Item', 'Cost']}
-                      rows={table_1_soft_costs.map((r) => [r.id, r.value])}
+                    <MyTable reverse={true} columns={['Item', 'Cost']}
+                      rows={table_1_soft_costs.map((r) => [r.id, r.value]).reverse()}
                       includeTotals={true}
                       caption={'Soft Costs'}
                     />
@@ -151,8 +151,8 @@ export default function EconomicReportTab({project_cost, table_1_soft_costs,
 
 
                   <Grid item xs={12} sm={4} lg={4}>
-                    <MyTable columns={['Item', 'Cost']}
-                      rows={table_2_pre_construction.map(r => [r.id, r.value])}
+                    <MyTable reverse={true} columns={['Item', 'Cost']}
+                      rows={table_2_pre_construction.map(r => [r.id, r.value]).reverse()}
                       includeTotals={true}
                       caption={'Pre-Construction'}
                     />
@@ -160,8 +160,8 @@ export default function EconomicReportTab({project_cost, table_1_soft_costs,
 
 
                   <Grid item xs={12} sm={4} lg={4}>
-                    <MyTable columns={['Unit', 'Cost']}
-                      rows={table_3_construction.map(r => [r.id, r.value])}
+                    <MyTable reverse={true} columns={['Unit', 'Cost']}
+                      rows={table_3_construction.map(r => [r.id, r.value]).reverse()}
                       includeTotals={true}
                       caption={'Construction'}
                     />

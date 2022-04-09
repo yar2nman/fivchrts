@@ -193,7 +193,7 @@ function App() {
       // eslint-disable-next-line
       for (const [key, vlaue] of Object.entries(solution.reports.units_report.graph_built_area)) {
         gba.push({ 'id': getName(vlaue.name), 'label': getName(vlaue.name), 'value': vlaue.area_by_unit });
-        setgraph_built_area(gba);
+        setgraph_built_area(gba.reverse());
       }
     }
 
@@ -302,7 +302,7 @@ function App() {
                       </Grid>
                     </Grid>
                     <Grid item xs={12} >
-                      <MyTable rows={table_2} columns={['  ', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
+                      <MyTable rows={table_2} columns={[' ', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
                     </Grid>
                   </Grid>
 
