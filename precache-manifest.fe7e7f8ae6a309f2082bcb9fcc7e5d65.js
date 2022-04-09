@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8be666c8e8bed05f4562886195ea0c0c",
+    "revision": "c620ec3b2557e70e195583956e1983bd",
     "url": "/fivchrts/index.html"
   },
   {
-    "revision": "627a6b034460b6d65c16",
+    "revision": "d7d3866fd6f8ed2b6492",
     "url": "/fivchrts/static/css/main.f95a07fa.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/fivchrts/static/js/3.ff86fa14.chunk.js"
   },
   {
-    "revision": "627a6b034460b6d65c16",
-    "url": "/fivchrts/static/js/main.d629b192.chunk.js"
+    "revision": "d7d3866fd6f8ed2b6492",
+    "url": "/fivchrts/static/js/main.46558af6.chunk.js"
   },
   {
     "revision": "d597fb5edb8a6ef2d390",
