@@ -57,32 +57,92 @@ function App() {
 
   const [data, setData] = useState([]);
   const [solution, setsolution] = useState({});
-  const [project_cost, setproject_cost] = useState([]);
-  const [table_1_soft_costs, settable_1_soft_costs] = useState({});
-  const [table_2_pre_construction, settable_2_pre_construction] = useState({});
-  const [table_3_construction, settable_3_construction] = useState({});
-  const [embodied_carbon_breakdown, setembodied_carbon_breakdown] = useState([]);
-  const [graph_built_area, setgraph_built_area] = useState([]);
-  const [table_2, settable_2] = useState([]);
-  const [table_1_flats_overall_income_dict, setttable_1_flats_overall_income_dict] = useState([]);
-  const [netZeroEnergy, settnetZeroEnergy] = useState([]);
-  const [netZeroCarpon, setnetZeroCarpon] = useState([]);
-  const [energy_consumption_breakwon, setenergy_consumption_breakwon] = useState([]);
-  const [normalised_emissions_CO2_m2_year, setnormalised_emissions_CO2_m2_year] = useState([]);
-  const [operationalCarbonBreakdown, setoperationalCarbonBreakdown] = useState([]);
 
-  const setSolutionData = (solution_name) => {
-    let solution = data.find(x => x.solution_name === solution_name)
-    setsolution(solution);
-    setProjectCost();
-    settable1soft_costs();
-    settable2pre_construction();
-    settable3construction();
-    setEmbodiedCarbonBreakdown();
-    setGraphBuiltArea();
-    settable2();
-    settable_1_flatsoverallincomedict()
-    setnormalisedemissionsCO2_m2_year()
+  const project_cost = () => {
+    let pc = [];
+    for (const [key, vlaue] of Object.entries(solution?.reports?.economic_report?.project_cost)) {
+      if (key !== 'total') {
+        pc.push({ 'id': getName(key), 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
+      }
+    }
+    return pc
+  }
+
+  const table_1_soft_costs = function settable1soft_costs() {
+    if (!solution || !solution.reports) {
+      return
+    }
+    let t1sc = [];
+    for (const [key, vlaue] of Object.entries(solution?.reports?.economic_report?.table_1_soft_costs)) {
+      t1sc.push({ 'id': getName(key), 'label': key, 'value': vlaue?.cost, 'ratio': vlaue?.ratio });
+    }
+    return t1sc
+  }
+
+  const table_2_pre_construction = function settable2pre_construction() {
+    let t2pc = [];
+    for (const [key, vlaue] of Object.entries(solution?.reports?.economic_report?.table_2_pre_construction)) {
+      t2pc.push({ 'id': getName(key), 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
+    }
+    return t2pc
+  }
+
+  const table_3_construction = function settable3construction() {
+    let t3c = [];
+    // eslint-disable-next-line
+    for (const [key, vlaue] of Object.entries(solution?.reports?.economic_report?.table_3_construction)) {
+      t3c.push({ 'id': vlaue.name, 'label': vlaue.name, 'value': vlaue.cost, 'ratio': vlaue.ratio });
+    }
+    return t3c
+  }
+
+  // Embodied Carbon Breakdown
+  const embodied_carbon_breakdown = function setEmbodiedCarbonBreakdown() {
+    let ecb = [];
+    for (const [key, vlaue] of Object.entries(solution?.reports?.environmental_report?.lca_dictionary?.embodied_carbon_breakdown)) {
+      ecb.push({ 'id': getName(key), 'label': getName(key), 'value': vlaue });
+    }
+    return ecb
+  }
+
+  // Graph Built Area
+  const graph_built_area = function setGraphBuiltArea() {
+    if (!solution || !solution.reports) {
+      return
+    }
+    let gba = [];
+    // eslint-disable-next-line
+    for (const [key, vlaue] of Object.entries(solution?.reports?.units_report?.graph_built_area)) {
+      gba.push({ 'id': getName(vlaue.name), 'label': getName(vlaue.name), 'value': vlaue.area_by_unit });
+    }
+    return gba.reverse()
+  }
+
+  // Table 2
+  const table_2 = function settable2() {
+    let t2 = [];
+    // eslint-disable-next-line
+    for (const [key, vlaue] of Object.entries(solution?.reports?.units_report?.table_2)) {
+      t2.push([vlaue.name, vlaue.number_of_units, vlaue.ratio_by_num_of_units, vlaue.ratio_by_nla, vlaue.ratio_by_total_built_area]);
+    }
+    return t2
+  }
+
+  // table_1_flats_overall_income_dict
+  const table_1_flats_overall_income_dict = function settable_1_flatsoverallincomedict() {
+    let t1 = []
+    // eslint-disable-next-line
+    for (const [key, vlaue] of Object.entries(solution.reports.economic_report.income.table_1_flats_overall_income_dict)) {
+      t1.push([vlaue.name, vlaue.income]);
+    }
+    return t1
+  }
+
+  const netZeroEnergy = () => {
+
+    if (!solution || !solution.reports) {
+      return
+    }
 
     let nzenergy = [{
       title: 'Energy Consumption',
@@ -94,9 +154,10 @@ function App() {
       total_KWH_year: solution.reports.environmental_report.net_zero_building.energy.energy_production.total_kWh_year,
       normalised_kWh_year_m2: solution.reports.environmental_report.net_zero_building.energy.energy_production.normalised_kWh_year_m2
     }]
-    settnetZeroEnergy(nzenergy)
+    return (nzenergy)
+  }
 
-
+  const netZeroCarpon = () => {
     let nzcarpon = [{
       title: 'Savings',
       total_tons_co2_year: solution.reports.environmental_report.net_zero_building.carbon.carbon_savings.total_tons_co2_year,
@@ -107,8 +168,10 @@ function App() {
       total_tons_co2_year: solution.reports.environmental_report.net_zero_building.carbon.overall_emissions.total_tons_co2_year,
       normalised_kgco2_m2_year: solution.reports.environmental_report.net_zero_building.carbon.overall_emissions.normalised_kgco2_m2_year
     }]
-    setnetZeroCarpon(nzcarpon)
+    return (nzcarpon)
+  }
 
+  const energy_consumption_breakwon = () => {
     let ecb = []
     ecb.push([
       'kWh/year',
@@ -136,102 +199,32 @@ function App() {
         ).toLocaleString()
       ])
 
+    return ecb
 
-    setenergy_consumption_breakwon(ecb)
+  }
 
-
-
-
-    function setProjectCost() {
-      let pc = [];
-      for (const [key, vlaue] of Object.entries(solution.reports.economic_report.project_cost)) {
-        if (key !== 'total') {
-          pc.push({ 'id': getName(key), 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
-        }
-        setproject_cost(pc);
-      }
+  // solution.reports.environmental_report.lca_dictionary.operational_emissions_breakdown.normalised_emissions_CO2_m2_year
+  const normalised_emissions_CO2_m2_year = function setnormalisedemissionsCO2_m2_year() {
+    let ne = []
+    // eslint-disable-next-line
+    for (const [key, vlaue] of Object.entries(solution.reports.environmental_report.lca_dictionary.operational_emissions_breakdown.normalised_emissions_CO2_m2_year)) {
+      ne.push({ 'id': getName(key, true), 'value': vlaue });
     }
+    return (ne)
+  }
 
-    function settable1soft_costs() {
-      let t1sc = [];
-      for (const [key, vlaue] of Object.entries(solution.reports.economic_report.table_1_soft_costs)) {
-        t1sc.push({ 'id': getName(key), 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
-        settable_1_soft_costs(t1sc);
-      }
-    }
-
-    function settable2pre_construction() {
-      let t2pc = [];
-      for (const [key, vlaue] of Object.entries(solution.reports.economic_report.table_2_pre_construction)) {
-        t2pc.push({ 'id': getName(key), 'label': key, 'value': vlaue.cost, 'ratio': vlaue.ratio });
-        settable_2_pre_construction(t2pc);
-      }
-    }
-
-    function settable3construction() {
-      let t3c = [];
-      // eslint-disable-next-line
-      for (const [key, vlaue] of Object.entries(solution.reports.economic_report.table_3_construction)) {
-        t3c.push({ 'id': vlaue.name, 'label': vlaue.name, 'value': vlaue.cost, 'ratio': vlaue.ratio });
-        settable_3_construction(t3c);
-      }
-    }
-
-
-    // Embodied Carbon Breakdown
-    function setEmbodiedCarbonBreakdown() {
-      let ecb = [];
-      for (const [key, vlaue] of Object.entries(solution.reports.environmental_report.lca_dictionary.embodied_carbon_breakdown)) {
-        ecb.push({ 'id': getName(key), 'label': getName(key), 'value': vlaue });
-        setembodied_carbon_breakdown(ecb);
-      }
-    }
-
-    // Graph Built Area
-    function setGraphBuiltArea() {
-      let gba = [];
-      // eslint-disable-next-line
-      for (const [key, vlaue] of Object.entries(solution.reports.units_report.graph_built_area)) {
-        gba.push({ 'id': getName(vlaue.name), 'label': getName(vlaue.name), 'value': vlaue.area_by_unit });
-        setgraph_built_area(gba.reverse());
-      }
-    }
-
-    // Table 2
-    function settable2() {
-      let t2 = [];
-      // eslint-disable-next-line
-      for (const [key, vlaue] of Object.entries(solution.reports.units_report.table_2)) {
-        t2.push([vlaue.name, vlaue.number_of_units, vlaue.ratio_by_num_of_units, vlaue.ratio_by_nla, vlaue.ratio_by_total_built_area]);
-
-
-      }
-      settable_2(t2);
-    }
-
-    // table_1_flats_overall_income_dict
-    function settable_1_flatsoverallincomedict() {
-      let t1 = []
-      // eslint-disable-next-line
-      for (const [key, vlaue] of Object.entries(solution.reports.economic_report.income.table_1_flats_overall_income_dict)) {
-        t1.push([vlaue.name, vlaue.income]);
-      }
-      setttable_1_flats_overall_income_dict(t1)
-    }
-
-    // solution.reports.environmental_report.lca_dictionary.operational_emissions_breakdown.normalised_emissions_CO2_m2_year
-    function setnormalisedemissionsCO2_m2_year() {
-      let ne = []
-      // eslint-disable-next-line
-      for (const [key, vlaue] of Object.entries(solution.reports.environmental_report.lca_dictionary.operational_emissions_breakdown.normalised_emissions_CO2_m2_year)) {
-        ne.push({ 'id': getName(key, true), 'value': vlaue });
-      }
-      setnormalised_emissions_CO2_m2_year(ne)
-    }
-
-    setoperationalCarbonBreakdown([{'id': 'Carbon Breakdown',
+  const operationalCarbonBreakdown = () => {
+    return [{
+      'id': 'Carbon Breakdown',
       'embodied': solution.reports.environmental_report.lca_dictionary.breakdown.embodied_carbon_kgco2_life,
-     'operational': solution.reports.environmental_report.lca_dictionary.breakdown.operational_carbon_kgco2_life}])
+      'operational': solution.reports.environmental_report.lca_dictionary.breakdown.operational_carbon_kgco2_life
+    }]
+  }
+
+  const setSolutionData = (solution_name) => {
+    let solution = data.find(x => x.solution_name === solution_name)
+    setsolution(solution);
+
 
   }
 
@@ -253,7 +246,6 @@ function App() {
       });
   }
 
-
   useEffect(() => {
     getData()
 
@@ -271,7 +263,7 @@ function App() {
 
 
         {/* -------------------------------------------------Accordion Area------------------------------------------------- */}
-        {graph_built_area && graph_built_area?.length > 0 &&
+        {graph_built_area() && graph_built_area()?.length > 0 &&
 
           //  --------------------------------unit report--------------------------------
           <Accordion>
@@ -286,7 +278,7 @@ function App() {
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6} lg={6}>
                   <ChartWrapper name={'Built Area (m²)'} >
-                    <MyResponsiveBar data={graph_built_area} keys={['value']} indexby={'id'}
+                    <MyResponsiveBar data={graph_built_area()} keys={['value']} indexby={'id'}
                       xtitle={' '} xaxixEnabled={false} isHorizontal={true} colors={{ scheme: 'reds' }}
                       margin={{ top: 0, right: 10, bottom: 0, left: 80 }} />
                   </ChartWrapper>
@@ -301,9 +293,11 @@ function App() {
                         <Grid item xs={12}>Total Built Area {solution.reports.units_report.table_1.total_built_area.toLocaleString()} m²</Grid>
                       </Grid>
                     </Grid>
-                    <Grid item xs={12} >
-                      <MyTable rows={table_2} columns={[' ', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
-                    </Grid>
+                    {table_2() && table_2().length > 0 &&
+                      <Grid item xs={12} >
+                        <MyTable rows={table_2()} columns={[' ', 'Number of units', '% of total units', '% of NLA', '% of built area']} includeTotals={true} />
+                      </Grid>
+                    }
                   </Grid>
 
                 </Grid>
@@ -314,7 +308,7 @@ function App() {
 
 
         {/* --------------------------------Economic Report-------------------------------- */}
-        {table_1_soft_costs && table_1_soft_costs?.length > 0 &&
+        {table_1_soft_costs() && table_1_soft_costs()?.length > 0 &&
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -326,13 +320,13 @@ function App() {
             <AccordionDetails>
               <Grid container spacing={1} >
                 <Grid item xs={12}>
-                  {project_cost && project_cost.length > 0 &&
-                    <EconomicReportTab project_cost={project_cost}
-                      table_1_soft_costs={table_1_soft_costs}
-                      table_2_pre_construction={table_2_pre_construction}
-                      table_3_construction={table_3_construction}
+                  {project_cost() && project_cost().length > 0 &&
+                    <EconomicReportTab project_cost={project_cost()}
+                      table_1_soft_costs={table_1_soft_costs()}
+                      table_2_pre_construction={table_2_pre_construction()}
+                      table_3_construction={table_3_construction()}
                       solution={solution}
-                      table_1_flats_overall_income_dict={table_1_flats_overall_income_dict}
+                      table_1_flats_overall_income_dict={table_1_flats_overall_income_dict()}
                     />
 
                   }  </Grid>
@@ -343,7 +337,7 @@ function App() {
         }
 
         {/* --------------------------Environmental Report-------------------------- */}
-        {netZeroEnergy && netZeroEnergy?.length > 0 &&
+        {netZeroEnergy() && netZeroEnergy()?.length > 0 &&
           <Accordion >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -354,13 +348,13 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <EnviromentTab
-                netZeroCarpon={netZeroCarpon}
-                netZeroEnergy={netZeroEnergy}
+                netZeroCarpon={netZeroCarpon()}
+                netZeroEnergy={netZeroEnergy()}
                 solution={solution}
-                energy_consumption_breakwon={energy_consumption_breakwon}
-                embodied_carbon_breakdown={embodied_carbon_breakdown}
-                normalised_emissions_CO2_m2_year={normalised_emissions_CO2_m2_year}
-                operationalCarbonBreakdown={operationalCarbonBreakdown}
+                energy_consumption_breakwon={energy_consumption_breakwon()}
+                embodied_carbon_breakdown={embodied_carbon_breakdown()}
+                normalised_emissions_CO2_m2_year={normalised_emissions_CO2_m2_year()}
+                operationalCarbonBreakdown={operationalCarbonBreakdown()}
 
 
               />
@@ -373,7 +367,6 @@ function App() {
     </>
   );
 }
-
 
 function SelectSolution(data, classes, solution, setSolutionData) {
   return (
