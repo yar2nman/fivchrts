@@ -1,6 +1,20 @@
-# Getting Started with Create React App
+# About
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a free lancing job to analyze and create report for data of construction solutions.
+
+# Used
+
+React material UI
+Nivo
+react-swipeable-views
+
+# to View on get pages
+
+http://yar2nman.github.io/fivchrts
+
+
+
+
 
 ## Available Scripts
 

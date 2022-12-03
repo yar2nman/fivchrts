@@ -8,13 +8,13 @@ import Tab from '@material-ui/core/Tab';
 // import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import MyResponsiveBar from './barchart';
+import MyResponsiveBar from '../utils/barchart';
 
 import Grid from '@material-ui/core/Grid';
 
-import ChartWrapper from './ChartWrapper';
+import ChartWrapper from '../utils/ChartWrapper';
 
-import MyTable from './Table';
+import MyTable from '../utils/Table';
 
 
 function TabPanel(props) {

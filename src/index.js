@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import ChartsContainer from './ChartsContainer';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-    <App />,
+    <ChartsContainer />,
   document.getElementById('root')
 );
 // ReactDOM.render(
@@ -16,7 +16,7 @@ ReactDOM.render(
 // );
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ChartsContainer />
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
-import MyResponsiveBar from './chartsRoot/barchart';
+import './ChartsContainer.css';
+import MyResponsiveBar from './utils/barchart';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import ChartWrapper from './chartsRoot/ChartWrapper';
+import ChartWrapper from './utils/ChartWrapper';
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
-import MyTable from './chartsRoot/Table';
+import MyTable from './utils/Table';
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import EconomicReportTab from './chartsRoot/economicReportTab';
-import EnviromentTab from './chartsRoot/enviromentReportTab';
+import EconomicReportTab from './EconomicReport/economicReportTab';
+import EnviromentTab from './EnvironmentalReport/enviromentReportTab';
 
 
 const getName = (str = '', take1 = false) => {
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   }
 }));
-function App() {
+function ChartsContainer() {
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -376,13 +376,16 @@ function SelectSolution(data, classes, solution, setSolutionData) {
         <Select defaultValue={''}
           labelId="solutions-select-label"
           id="solutions-select"
+          name='select'
           value={solution?.solution_name || ''}
-          onChange={d => setSolutionData(d.target.value)}
+          onChange={d => {
+            console.log(d)
+            setSolutionData(d.target.value)}}
 
         >
-          {data.map((item) =>
-            <MenuItem value={item.solution_name}
-              key={item?.solution_name}>{getName(item.solution_name)}</MenuItem>
+          {data.map((item, i) =>
+            <MenuItem value={item.solution_name} selected={solution.solution_name === item.solution_name}
+              key={i} >{getName(item.solution_name)}</MenuItem>
           )}
         </Select>
       </FormControl>
@@ -390,7 +393,7 @@ function SelectSolution(data, classes, solution, setSolutionData) {
   )
 }
 
-export default App;
+export default ChartsContainer;
 
 
 

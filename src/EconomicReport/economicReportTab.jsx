@@ -9,11 +9,11 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 
 
-import MyTable from './Table';
+import MyTable from '../utils/Table';
 import Grid from '@material-ui/core/Grid';
-import ChartWrapper from './ChartWrapper';
-import MyResponsivePie from './PiChart';
-import MyResponsiveBar from './barchart';
+import ChartWrapper from '../utils/ChartWrapper';
+import MyResponsivePie from '../utils/PiChart';
+import MyResponsiveBar from '../utils/barchart';
 
 
 
